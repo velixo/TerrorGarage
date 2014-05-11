@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class BicycleGarageDatabase {
 	
-	HashMap<String,User> whosBikeIs;
+	HashMap<String,User> barcodemap;
 	HashMap<String,LinkedList<User>> whosPinIs;
 	LinkedList<RetrievalOrder> retrievalOrders;
 	
@@ -14,6 +14,7 @@ public class BicycleGarageDatabase {
 	
 	public BicycleGarageDatabase(){
 		//TODO;
+		
 	}
 	public boolean checkBarcodeRegistered(String barcode){
 		//TODO;
@@ -27,6 +28,10 @@ public class BicycleGarageDatabase {
 		//TODO;
 		return false;
 	}
+	public User getUser(String barcode){
+		
+		return barcodemap.get(barcode);
+	}
 	public void save(){
 		//TODO;
 	}
@@ -36,4 +41,7 @@ public class BicycleGarageDatabase {
 	public void setDirectory(String dir){
 		//TODO;
 	}
+	
+	
+	
 }
