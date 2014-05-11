@@ -1,3 +1,7 @@
+import drivers.BarcodePrinter;
+import drivers.ElectronicLock;
+import drivers.PinCodeTerminal;
+
 //import drivers;
 
 public class BicycleGarageManager {
@@ -17,8 +21,9 @@ public class BicycleGarageManager {
 	 * @param capacity
 	 *           maximala mängden cyklar som får plats i garaget
 	 */
-	public BicycleGarageManager(int capacity) {
-		PinCharCollector charCollecter = new PinCharCollector;
+	public BicycleGarageManager(int capacity, BicycleGarageDatabase database) {
+		charCollecter = new PinCharCollector;
+		this.database = database;
 		capacity = 0;
 		bikesInGarage = 0;
 	}
