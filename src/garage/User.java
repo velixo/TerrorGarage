@@ -19,4 +19,8 @@ public class User implements Comparable<User>{
 	public int compareTo(User other) {
 		return barcode.compareTo(other.getBarcode());
 	}
+	
+	public void setPin (String newPin) {
+		
+	}
 }

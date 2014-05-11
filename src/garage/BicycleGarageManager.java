@@ -22,7 +22,7 @@ public class BicycleGarageManager {
 	 *           maximala mängden cyklar som får plats i garaget
 	 */
 	public BicycleGarageManager(int capacity, BicycleGarageDatabase database) {
-		charCollecter = new PinCharCollector;
+		charCollecter = new PinCharCollector(database);
 		this.database = database;
 		capacity = 0;
 		bikesInGarage = 0;
@@ -58,7 +58,7 @@ public class BicycleGarageManager {
 	 *            cykelns streckkod
 	 */
 	public void entryBarcode(String barcode) {
-		if (bikesInGarage < capacity && checkBarcodeRegistered(barcode)) {
+		if (bikesInGarage < capacity && database.checkBarcodeRegistered(barcode)) {
 			bikesInGarage++;
 			entryLock.open(10);
 		}
@@ -73,7 +73,7 @@ public class BicycleGarageManager {
 	 *            cykelns streckkod
 	 */
 	public void exitBarcode(String barcode) {
-		if (checkBarcodeRegistered(barcode) && checkBikeRetrievable(barcode)) {
+		if (database.checkBarcodeRegistered(barcode) && database.checkBikeRetrievable(barcode)) {
 			bikesInGarage--;
 			exitLock.open(10);
 		}
