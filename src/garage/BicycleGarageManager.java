@@ -1,3 +1,7 @@
+import drivers.BarcodePrinter;
+import drivers.ElectronicLock;
+import drivers.PinCodeTerminal;
+
 //import drivers;
 
 public class BicycleGarageManager {
