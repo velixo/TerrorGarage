@@ -24,7 +24,12 @@ public class BicycleGarageDatabase {
 		return barcodeMap.containsKey(barcode);
 	}
 	public boolean checkPinRegistered(String pin){
-		return pinMap.containsKey(pin);
+		if(pinMap.containsKey(pin)){
+			return !pinMap.get(pin).isEmpty();
+		}
+		else{
+			return false;
+		}
 	}
 	public boolean checkBikeRetrievable(String barcode){
 		
@@ -72,6 +77,12 @@ public class BicycleGarageDatabase {
 		}
 		pinMap.get(pin).add(usr);
 		
+	}
+	//TODO add to designdoc
+	public void removeUser(String barcode){
+		String pin = barcodeMap.get(barcode).getPin();
+		barcodeMap.remove(barcode);
+		pinMap.get(pin).remove(barcode);
 	}
 	
 	
