@@ -1,11 +1,11 @@
 package garage;
 
 public class User implements Comparable<String>{
-	String name;
-	String telNr;
-	String barcode;
-	String pin;
-	int bikesInGarage;
+	private String name;
+	private String telNr;
+	private String barcode;
+	private String pin;
+	private int bikesInGarage;
 	
 	public User(String n, String t, String b, String p){
 		name = n;
