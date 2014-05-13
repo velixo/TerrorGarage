@@ -4,17 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SpringLayout;
+
+import springUtilities.SpringUtilities;
 
 public class Operator {
 
@@ -25,7 +30,8 @@ public class Operator {
 	private JButton add, edit, remove;
 	private JMenu settings, view, about;
 	private JMenuBar menuBar;
-	private JMenuItem options, showBarcodeReader, showBarcodeWrite, showPIN, showLock, showAbout;
+	private JMenuItem options, showBarcodeReader, showBarcodeWrite, showPIN,
+			showLock, showAbout;
 
 	/**
 	 * Skapar ett GUI med alla knappar, fönster och dylikt som ska finnas med i
@@ -69,50 +75,46 @@ public class Operator {
 		options.getAccessibleContext().setAccessibleDescription(
 				"This doesn't really do anything");
 		settings.add(options);
-		
+
 		showBarcodeReader = new JCheckBoxMenuItem("Visa streckkodsläsare");
 		showBarcodeReader.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
 				ActionEvent.CTRL_MASK));
-		showBarcodeReader.getAccessibleContext().setAccessibleDescription(
-				"");
+		showBarcodeReader.getAccessibleContext().setAccessibleDescription("");
 		view.add(showBarcodeReader);
-		
+
 		showBarcodeWrite = new JCheckBoxMenuItem("Visa streckkodsskrivare");
 		showBarcodeWrite.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
 				ActionEvent.CTRL_MASK));
-		showBarcodeWrite.getAccessibleContext().setAccessibleDescription(
-				"");
+		showBarcodeWrite.getAccessibleContext().setAccessibleDescription("");
 		view.add(showBarcodeWrite);
-		
+
 		showPIN = new JCheckBoxMenuItem("Visa PIN-kodsterminal");
 		showPIN.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3,
 				ActionEvent.CTRL_MASK));
-		showPIN.getAccessibleContext().setAccessibleDescription(
-				"");
+		showPIN.getAccessibleContext().setAccessibleDescription("");
 		view.add(showPIN);
-		
+
 		showLock = new JCheckBoxMenuItem("Visa dörrlås");
 		showLock.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4,
 				ActionEvent.CTRL_MASK));
-		showLock.getAccessibleContext().setAccessibleDescription(
-				"");
+		showLock.getAccessibleContext().setAccessibleDescription("");
 		view.add(showLock);
-		
+
 		showAbout = new JMenuItem("Alternativ", KeyEvent.VK_T);
 		showAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
 				ActionEvent.SHIFT_MASK));
-		showAbout.getAccessibleContext().setAccessibleDescription(
-				"");
+		showAbout.getAccessibleContext().setAccessibleDescription("");
 		about.add(showAbout);
-		
+
 		add = new JButton("Lägg till cykelägare");
+		add.addActionListener(new AddBikeOwner());
 		edit = new JButton("Redigera cykelägare");
 		remove = new JButton("Ta bort cykelägare");
 
 		textField = new JTextField(2);
 		textField.setSize(600, 500);
 		textField.setEditable(false);
-		textField.setBackground(new Color(255,255,255));
+		textField.setBackground(new Color(255, 255, 255));
 
 		menuBar = new JMenuBar();
 
@@ -134,55 +136,66 @@ public class Operator {
 		frame.pack();
 	}
 
-	/**
-	 * Lägger till en ny cykelägare i databasen.
-	 * 
-	 * @param pin
-	 *            cykelägarens PIN-kod
-	 * @param barcode
-	 *            cykelägarens streckkod
-	 * @param name
-	 *            cykelägarens namn
-	 * @param telNr
-	 *            cykelägarens telefonnummer
-	 * @param copiesOfBarcode
-	 *            antal cyklar som registreras hos cykelägaren dvs. hur många
-	 *            streckkoder som ska skrivas ut
-	 */
-	public void AddBikeOwner(String pin, String barcode, String name,
-			String telNr, int copiesOfBarcode) {
+	class AddBikeOwner implements ActionListener {
+		
+		private JFrame frame;
+		
+		public void actionPerformed(ActionEvent e) {
+			String[] labels = { "Name: ", "Fax: ", "Email: ", "Address: " };
+			int numPairs = labels.length;
 
+			// Create and populate the panel.
+			JPanel p = new JPanel(new SpringLayout());
+			for (int i = 0; i < numPairs; i++) {
+				JLabel l = new JLabel(labels[i], JLabel.TRAILING);
+				p.add(l);
+				JTextField textField = new JTextField(10);
+				l.setLabelFor(textField);
+				p.add(textField);
+			}
+
+			// Lay out the panel.
+			SpringUtilities.makeCompactGrid(p, numPairs, 2, // rows, cols
+					6, 6, // initX, initY
+					6, 6); // xPad, yPad
+
+			// Create and set up the window.
+			frame = new JFrame("SpringForm");
+			frame.setLayout(new BorderLayout());
+			frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+			// Set up the content pane.
+			p.setOpaque(true); // content panes must be opaque
+			frame.add(p, BorderLayout.CENTER);
+
+			JPanel buttons = new JPanel();
+			buttons.setLayout(new BorderLayout());
+			
+			JButton cancel = new JButton("Avbryt");
+			cancel.addActionListener(new Cancel());
+			
+			buttons.add(cancel, BorderLayout.LINE_START);
+			buttons.add(new JButton("Verkställ"), BorderLayout.LINE_END);
+			buttons.add(new JButton("Generera"), BorderLayout.SOUTH);
+
+			// Display the window.
+			frame.add(buttons, BorderLayout.SOUTH);
+			frame.pack();
+			frame.setVisible(true);
+		}
+		
+		class Cancel implements ActionListener{
+
+			public void actionPerformed(ActionEvent arg0) {
+				frame.dispose();
+			}
+		}
+		
+		class 
+
+			
 	}
-
-	/**
-	 * Redigerar en cykelägare.
-	 * 
-	 * @param pin
-	 *            cykelägarens PIN-kod
-	 * @param barcode
-	 *            cykelägarens streckkod
-	 * @param name
-	 *            cykelägarens namn
-	 * @param telNr
-	 *            cykelägarens telefonnummer
-	 */
-	public void EditBikeOwner(String pin, String barcode, String name,
-			String telNr) {
-
-	}
-
-	/**
-	 * Tar bort en cykelägare. Ifall cykelägaren har cyklar i garaget så kommer
-	 * en MessageBox upp där operatören kan välja att radera cykelägaren ändå.
-	 * 
-	 * @param barcode
-	 *            cykelägarens streckkod
-	 * @param pin
-	 *            cykelägarens PIN-kod
-	 */
-	public void removeUser(String barcode, String pin) {
-
-	}
+	
 
 	/**
 	 * Returnerar en specifik cykelägare.
