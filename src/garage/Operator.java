@@ -248,6 +248,17 @@ public class Operator {
 					barcodeBuilder.append(String.valueOf(b));
 				}
 				
+				while(database.checkPinRegistered(newPin)){
+					pinBuilder.delete(0, 4);
+					
+					for(int i = 0; i < 4; i++){
+						int a = rand.nextInt(10);
+						pinBuilder.append(String.valueOf(a));
+					}
+					
+					newPin = pinBuilder.toString();
+				}
+				
 				newBarcode = barcodeBuilder.toString();
 				
 				while(database.checkBarcodeRegistered(newBarcode)){
@@ -262,16 +273,6 @@ public class Operator {
 				}
 				
 				textFields[1].setText(newBarcode);
-//				newPin = String.valueOf(rand.nextInt(9000) + 1000);
-//				newBarcode = String.valueOf(rand.nextInt(90000) + 10000);
-//				while(database.checkPinRegistered(newPin)){
-//					newPin = String.valueOf(rand.nextInt(9000) + 1000);
-//				}
-//				
-//				while(database.checkBarcodeRegistered(newBarcode)){
-//					newBarcode = String.valueOf(rand.nextInt(90000) + 10000);
-//				}
-//				
 			}
 		}
 
