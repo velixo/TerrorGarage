@@ -7,6 +7,18 @@ public class User{
 	private String pin;
 	private int bikesInGarage;
 	
+	/**
+	 * Konstruktorn för en User.
+	 * 
+	 * @param n
+	 * 	userns name
+	 * @param t
+	 * 	userns telefonnummer
+	 * @param b
+	 * 	userns streckkod
+	 * @param p
+	 * 	userns PIN-kod
+	 */
 	public User(String n, String t, String b, String p){
 		name = n;
 		telNr = t;
@@ -14,22 +26,37 @@ public class User{
 		pin = p;
 	}
 	
+	/**
+	 * Returnerar userns streckkod.
+	 */
 	public String getBarcode(){
 		return barcode;
 	}
 	
+	/**
+	 * Returnerar userns PIN-kod.
+	 */
 	public String getPin(){
 		return pin;
 	}
 	
+	/**
+	 * Returnerar userns namn.
+	 */
 	public String getName(){
 		return name;
 	}
 	
+	/**
+	 * Returnerar userns telefonnummer.
+	 */
 	public String getTelNr(){
 		return telNr;
 	}
 	
+	/**
+	 * Returnerar antalet cyklar usern har i garaget.
+	 */
 	public int getBikesInGarage(){
 		return bikesInGarage;
 	}
@@ -45,6 +72,12 @@ public class User{
 		pin = p;
 	}
 	
+	/**
+	 * Tilldelar usern ett nytt namn.
+	 * 
+	 * @param n
+	 * 	userns nya namn
+	 */
 	public void setName(String n){
 		name = n;
 	}
