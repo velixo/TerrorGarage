@@ -1,6 +1,6 @@
 package garage;
 
-public class User implements Comparable<String>{
+public class User{
 	private String name;
 	private String telNr;
 	private String barcode;
@@ -35,10 +35,10 @@ public class User implements Comparable<String>{
 	}
 	
 
-	@Override
-	public int compareTo(String otherbc) {
-		return barcode.compareTo(otherbc);
-	}
+//	@Override
+//	public int compareTo(String otherbc) {
+//		return barcode.compareTo(otherbc);
+//	}
 	
 	//public void setPin måste diskuteras!
 	

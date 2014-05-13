@@ -6,11 +6,11 @@ import java.util.LinkedList;
 
 public class BicycleGarageDatabase {
 	
-	HashMap<String,User> barcodeMap;
-	HashMap<String,LinkedList<User>> pinMap;
-	LinkedList<RetrievalOrder> orders;
+	private	HashMap<String,User> barcodeMap;
+	private HashMap<String,LinkedList<User>> pinMap;
+	private LinkedList<RetrievalOrder> orders;
 	
-	String savedir;
+	private String savedir;
 	
 	
 	public BicycleGarageDatabase(){
@@ -78,11 +78,11 @@ public class BicycleGarageDatabase {
 		pinMap.get(pin).add(usr);
 		
 	}
-	//TODO add to designdoc
+	//TODO add to designdoc, also, snygga till.
 	public void removeUser(String barcode){
 		String pin = barcodeMap.get(barcode).getPin();
+		pinMap.get(pin).remove(barcodeMap.get(barcode));
 		barcodeMap.remove(barcode);
-		pinMap.get(pin).remove(barcode);
 	}
 	
 	
