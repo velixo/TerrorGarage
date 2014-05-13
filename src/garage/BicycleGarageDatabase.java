@@ -30,7 +30,7 @@ public class BicycleGarageDatabase {
 		
 		String thePin = barcodeMap.get(barcode).getPin();
 		for(RetrievalOrder o : orders){
-			//TODO check for nulls, perhaps trim statement.;
+			//TODO Testers: watch out for NoSuchElement.
 			if(o.getPin().equals(thePin)){
 				orders.remove(o);
 				return true;
@@ -41,10 +41,15 @@ public class BicycleGarageDatabase {
 		}
 		return false;
 	}
+	public boolean setBikesRetrievable(String pin){
+		orders.add(new RetrievalOrder(pin));
+		return false;
+	}
 	public User getUserByBarcode(String barcode){
 		return barcodeMap.get(barcode);
 	}
 	public User getUserByName(String name){
+		//TODO
 		return null;
 	}
 	public LinkedList<User> getUsers(String pin){
@@ -59,8 +64,15 @@ public class BicycleGarageDatabase {
 	public void setDirectory(String dir){
 		//TODO;
 	}
-	public void addUser(/*TODO: add parameters*/){
+	public void addUser(String pin, String barcode, String name, String telNr){
 		//TODO;
+		User usr = new User(name, telNr, barcode, pin);
+		barcodeMap.put(barcode, usr);
+		if(!pinMap.containsKey(pin)){
+			pinMap.put(pin, new LinkedList<User>());
+		}
+		pinMap.get(pin).add(usr);
+		
 	}
 	
 	
