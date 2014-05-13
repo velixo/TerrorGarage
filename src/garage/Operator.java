@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -14,7 +15,9 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SpringLayout;
@@ -25,7 +28,7 @@ public class Operator {
 
 	private BicycleGarageDatabase database;
 	private JPanel buttonPanel, textPanel;
-	private JTextField textField;
+	private JTextArea mainTextField;
 	private JFrame frame;
 	private JButton add, edit, remove;
 	private JMenu settings, view, about;
@@ -52,7 +55,7 @@ public class Operator {
 
 		frame = new JFrame();
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.setPreferredSize(new Dimension(500, 200));
 		frame.setMinimumSize(new Dimension(470, 200));
@@ -111,10 +114,10 @@ public class Operator {
 		edit = new JButton("Redigera cykelägare");
 		remove = new JButton("Ta bort cykelägare");
 
-		textField = new JTextField(2);
-		textField.setSize(600, 500);
-		textField.setEditable(false);
-		textField.setBackground(new Color(255, 255, 255));
+		mainTextField = new JTextArea();
+		mainTextField.setSize(600, 500);
+		mainTextField.setEditable(false);
+		mainTextField.setBackground(new Color(255, 255, 255));
 
 		menuBar = new JMenuBar();
 
@@ -124,7 +127,7 @@ public class Operator {
 
 		frame.setJMenuBar(menuBar);
 
-		textPanel.add(textField, BorderLayout.CENTER);
+		textPanel.add(mainTextField, BorderLayout.CENTER);
 		textPanel.setBackground(new Color(124, 230, 242));
 
 		buttonPanel.add(add);
@@ -137,65 +140,111 @@ public class Operator {
 	}
 
 	class AddBikeOwner implements ActionListener {
-		
-		private JFrame frame;
-		
+
+		private JFrame addFrame;
+		private JTextField[] textFields;
+		private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
+				"Telefonnummer: ", "Antal Streckkodskopior: " };
+
 		public void actionPerformed(ActionEvent e) {
-			String[] labels = { "Name: ", "Fax: ", "Email: ", "Address: " };
 			int numPairs = labels.length;
 
-			// Create and populate the panel.
+			textFields = new JTextField[labels.length];
 			JPanel p = new JPanel(new SpringLayout());
 			for (int i = 0; i < numPairs; i++) {
 				JLabel l = new JLabel(labels[i], JLabel.TRAILING);
 				p.add(l);
 				JTextField textField = new JTextField(10);
+				textFields[i] = textField;
 				l.setLabelFor(textField);
 				p.add(textField);
 			}
 
-			// Lay out the panel.
-			SpringUtilities.makeCompactGrid(p, numPairs, 2, // rows, cols
-					6, 6, // initX, initY
-					6, 6); // xPad, yPad
+			SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
 
-			// Create and set up the window.
-			frame = new JFrame("SpringForm");
-			frame.setLayout(new BorderLayout());
-			frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			addFrame = new JFrame("SpringForm");
+			addFrame.setLayout(new BorderLayout());
+			addFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
-			// Set up the content pane.
-			p.setOpaque(true); // content panes must be opaque
-			frame.add(p, BorderLayout.CENTER);
+			p.setOpaque(true);
+			addFrame.add(p, BorderLayout.CENTER);
 
 			JPanel buttons = new JPanel();
 			buttons.setLayout(new BorderLayout());
-			
+
 			JButton cancel = new JButton("Avbryt");
 			cancel.addActionListener(new Cancel());
 			
+			JButton apply = new JButton("Verkställ");
+			apply.addActionListener(new Apply());
+			
+			JButton generate = new JButton("Generera");
+			generate.addActionListener(new Generate());
+			
 			buttons.add(cancel, BorderLayout.LINE_START);
-			buttons.add(new JButton("Verkställ"), BorderLayout.LINE_END);
-			buttons.add(new JButton("Generera"), BorderLayout.SOUTH);
+			buttons.add(apply, BorderLayout.LINE_END);
+			buttons.add(generate, BorderLayout.SOUTH);
 
-			// Display the window.
-			frame.add(buttons, BorderLayout.SOUTH);
-			frame.pack();
-			frame.setVisible(true);
+			addFrame.add(buttons, BorderLayout.SOUTH);
+			addFrame.pack();
+			addFrame.setVisible(true);
 		}
-		
-		class Cancel implements ActionListener{
+
+		class Cancel implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
-				frame.dispose();
+				addFrame.setVisible(false);
+			}
+		}
+
+		class Apply implements ActionListener {
+
+			public void actionPerformed(ActionEvent arg0) {
+				mainTextField.setText("");
+				if(database.checkBarcodeRegistered(textFields[1].getText())){
+					JOptionPane.showMessageDialog (null, "Streckkoden är upptagen", "Felmeddelande", JOptionPane.ERROR_MESSAGE);
+				} else {
+				database.addUser(textFields[0].getText(),
+						textFields[1].getText(), textFields[2].getText(),
+						textFields[3].getText());
+				
+				StringBuilder sb = new StringBuilder();
+				
+				sb.append("Cykelägaren har lagts till\n");
+				
+				for(int i = 0; i < textFields.length; i++){
+					sb.append(labels[i]);
+					sb.append(textFields[i].getText() + "\n");
+				}
+				
+				mainTextField.setText(sb.toString());
+				
+				addFrame.setVisible(false);
+				}
 			}
 		}
 		
-		class 
-
+		class Generate implements ActionListener {
 			
+			private Random rand = new Random();
+			private String newPin;
+			private String newBarcode;
+			
+			public void actionPerformed(ActionEvent arg0){
+				newPin = String.valueOf(rand.nextInt(8999) + 1000);
+				newBarcode = String.valueOf(rand.nextInt(89999) + 10000);
+				while(database.checkPinRegistered(newPin)){
+					newPin = String.valueOf(rand.nextInt(9999) + 1000);
+				}
+				textFields[0].setText(newPin);
+				while(database.checkBarcodeRegistered(newBarcode)){
+					newBarcode = String.valueOf(rand.nextInt(99999) + 10000);
+				}
+				textFields[1].setText(newBarcode);
+			}
+		}
+
 	}
-	
 
 	/**
 	 * Returnerar en specifik cykelägare.
