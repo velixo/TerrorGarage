@@ -231,16 +231,47 @@ public class Operator {
 			private String newBarcode;
 			
 			public void actionPerformed(ActionEvent arg0){
-				newPin = String.valueOf(rand.nextInt(8999) + 1000);
-				newBarcode = String.valueOf(rand.nextInt(89999) + 10000);
-				while(database.checkPinRegistered(newPin)){
-					newPin = String.valueOf(rand.nextInt(9999) + 1000);
+				
+				StringBuilder pinBuilder = new StringBuilder();
+				
+				for(int i = 0; i < 4; i++){
+					int a = rand.nextInt(10);
+					pinBuilder.append(String.valueOf(a));
 				}
+				
+				newPin = pinBuilder.toString();
 				textFields[0].setText(newPin);
-				while(database.checkBarcodeRegistered(newBarcode)){
-					newBarcode = String.valueOf(rand.nextInt(99999) + 10000);
+				StringBuilder barcodeBuilder = new StringBuilder();
+				
+				for(int i = 0; i < 5; i++){
+					int b = rand.nextInt(10);
+					barcodeBuilder.append(String.valueOf(b));
 				}
+				
+				newBarcode = barcodeBuilder.toString();
+				
+				while(database.checkBarcodeRegistered(newBarcode)){
+					barcodeBuilder.delete(0, 5);
+					
+					for(int i = 0; i < 5; i++){
+						int b = rand.nextInt(10);
+						barcodeBuilder.append(String.valueOf(b));
+					}
+					
+					newBarcode = barcodeBuilder.toString();
+				}
+				
 				textFields[1].setText(newBarcode);
+//				newPin = String.valueOf(rand.nextInt(9000) + 1000);
+//				newBarcode = String.valueOf(rand.nextInt(90000) + 10000);
+//				while(database.checkPinRegistered(newPin)){
+//					newPin = String.valueOf(rand.nextInt(9000) + 1000);
+//				}
+//				
+//				while(database.checkBarcodeRegistered(newBarcode)){
+//					newBarcode = String.valueOf(rand.nextInt(90000) + 10000);
+//				}
+//				
 			}
 		}
 
