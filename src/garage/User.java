@@ -40,7 +40,10 @@ public class User{
 //		return barcode.compareTo(otherbc);
 //	}
 	
-	//public void setPin måste diskuteras!
+	//OBS! ANVÄND ENDAST GENOM DATABASEN!
+	public void setPin(String p){
+		pin = p;
+	}
 	
 	public void setName(String n){
 		name = n;
