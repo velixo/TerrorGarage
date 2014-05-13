@@ -10,7 +10,7 @@ public class BicycleGarageDatabase {
 	HashMap<String,LinkedList<User>> pinMap;
 	LinkedList<RetrievalOrder> orders;
 	
-	String savefile;
+	String savedir;
 	
 	
 	public BicycleGarageDatabase(){
@@ -18,19 +18,24 @@ public class BicycleGarageDatabase {
 		barcodeMap = new HashMap<String, User>();
 		pinMap = new HashMap<String, LinkedList<User>>();
 		orders = new LinkedList<RetrievalOrder>();
-		savefile = "garagedata";
+		savedir = "garagedata";
 	}
 	public boolean checkBarcodeRegistered(String barcode){
 		return barcodeMap.containsKey(barcode);
 	}
 	public boolean checkPinRegistered(String pin){
-		return pinMap.containsKey(pin);
+		if(pinMap.containsKey(pin)){
+			return !pinMap.get(pin).isEmpty();
+		}
+		else{
+			return false;
+		}
 	}
 	public boolean checkBikeRetrievable(String barcode){
 		
 		String thePin = barcodeMap.get(barcode).getPin();
 		for(RetrievalOrder o : orders){
-			//TODO Testers: watch out for NoSuchElement.
+			//Testers: watch out for NoSuchElement.
 			if(o.getPin().equals(thePin)){
 				orders.remove(o);
 				return true;
@@ -62,10 +67,9 @@ public class BicycleGarageDatabase {
 		//TODO;
 	}
 	public void setDirectory(String dir){
-		//TODO;
+		savedir = dir;
 	}
 	public void addUser(String pin, String barcode, String name, String telNr){
-		//TODO;
 		User usr = new User(name, telNr, barcode, pin);
 		barcodeMap.put(barcode, usr);
 		if(!pinMap.containsKey(pin)){
@@ -73,6 +77,12 @@ public class BicycleGarageDatabase {
 		}
 		pinMap.get(pin).add(usr);
 		
+	}
+	//TODO add to designdoc
+	public void removeUser(String barcode){
+		String pin = barcodeMap.get(barcode).getPin();
+		barcodeMap.remove(barcode);
+		pinMap.get(pin).remove(barcode);
 	}
 	
 	

@@ -1,11 +1,11 @@
 package garage;
 
-public class User implements Comparable<User>{
-	String name;
-	String telNr;
-	String barcode;
-	String pin;
-	int bikesInGarage;
+public class User implements Comparable<String>{
+	private String name;
+	private String telNr;
+	private String barcode;
+	private String pin;
+	private int bikesInGarage;
 	
 	public User(String n, String t, String b, String p){
 		name = n;
@@ -21,13 +21,28 @@ public class User implements Comparable<User>{
 	public String getPin(){
 		return pin;
 	}
-
-	@Override
-	public int compareTo(User other) {
-		return barcode.compareTo(other.getBarcode());
+	
+	public String getName(){
+		return name;
 	}
 	
-	public void setPin (String newPin) {
-		
+	public String getTelNr(){
+		return telNr;
+	}
+	
+	public int getBikesInGarage(){
+		return bikesInGarage;
+	}
+	
+
+	@Override
+	public int compareTo(String otherbc) {
+		return barcode.compareTo(otherbc);
+	}
+	
+	//public void setPin måste diskuteras!
+	
+	public void setName(String n){
+		name = n;
 	}
 }
