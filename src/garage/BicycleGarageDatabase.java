@@ -96,5 +96,11 @@ public class BicycleGarageDatabase {
 		barcodeMap.remove(barcode);
 	}
 	
+	//TODO*****************ADD FOLLOWING TO DESIGNDOC************************************
+	
+	public void modifyBikesInGarage(){
+		//TODO
+	}
+	
 	
 }
