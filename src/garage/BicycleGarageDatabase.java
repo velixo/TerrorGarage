@@ -78,7 +78,18 @@ public class BicycleGarageDatabase {
 		pinMap.get(pin).add(usr);
 		
 	}
-	//TODO add to designdoc, also, snygga till.
+	public void changeUserPin(String barcode, String newPin){
+		User u = barcodeMap.get(barcode);
+		String oldPin = u.getPin();
+		//remove from old pin list
+		pinMap.get(oldPin).remove(u);
+		//insert in new pin list
+		if(!pinMap.containsKey(newPin)){
+			pinMap.put(newPin, new LinkedList<User>());
+		}
+		pinMap.get(newPin).add(u);
+	}
+	//TODO snygga till.
 	public void removeUser(String barcode){
 		String pin = barcodeMap.get(barcode).getPin();
 		pinMap.get(pin).remove(barcodeMap.get(barcode));
