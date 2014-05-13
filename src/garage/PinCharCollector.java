@@ -114,23 +114,23 @@ public class PinCharCollector {
 				if (blinkMode == BLINKING_SINGLE) {
 					while (permissionToRun){
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
-						Thread.sleep(wait);
+						Thread.sleep(wait * 1000);
 					}
 				} else if (blinkMode == BLINKING_DOUBLE) {
 					while (true){
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
-						Thread.sleep(interval);
+						Thread.sleep(interval * 1000);
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
-						Thread.sleep(wait);
+						Thread.sleep(wait * 1000);
 					}
 				} else {
 					while (true){
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
-						Thread.sleep(interval);
+						Thread.sleep(interval * 1000);
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
-						Thread.sleep(interval);
+						Thread.sleep(interval * 1000);
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
-						Thread.sleep(wait);
+						Thread.sleep(wait * 1000);
 					}
 				}
 			} catch (InterruptedException iex) {}
