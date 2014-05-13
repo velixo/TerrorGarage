@@ -21,13 +21,28 @@ public class User implements Comparable<User>{
 	public String getPin(){
 		return pin;
 	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public String getTelNr(){
+		return telNr;
+	}
+	
+	public int getBikesInGarage(){
+		return bikesInGarage;
+	}
+	
 
 	@Override
 	public int compareTo(User other) {
 		return barcode.compareTo(other.getBarcode());
 	}
 	
-	public void setPin (String newPin) {
-		
+	//public void setPin måste diskuteras!
+	
+	public void setName(String n){
+		name = n;
 	}
 }
