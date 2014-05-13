@@ -1,3 +1,5 @@
+package garage;
+
 import drivers.BarcodePrinter;
 import drivers.ElectronicLock;
 import drivers.PinCodeTerminal;
