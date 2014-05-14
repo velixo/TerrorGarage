@@ -27,6 +27,7 @@ import springUtilities.SpringUtilities;
 public class Operator {
 
 	private BicycleGarageDatabase database;
+	private BicycleGarageManager manager;
 	private JPanel buttonPanel, textPanel;
 	private JTextArea mainTextField;
 	private JFrame frame;
@@ -43,8 +44,9 @@ public class Operator {
 	 * @param database
 	 *            cykelgaragets databas som skall användas
 	 */
-	public Operator(BicycleGarageDatabase database) {
+	public Operator(BicycleGarageDatabase database, BicycleGarageManager manager) {
 		this.database = database;
+		this.manager = manager;
 
 		buttonPanel = new JPanel();
 		buttonPanel.setVisible(true);
@@ -328,7 +330,7 @@ public class Operator {
 			cancel.addActionListener(new Cancel());
 			//
 			JButton apply = new JButton("Ta bort");
-			// apply.addActionListener(new Apply());
+			apply.addActionListener(new Apply());
 
 			buttons.add(cancel, BorderLayout.LINE_START);
 			buttons.add(apply, BorderLayout.LINE_END);
@@ -337,13 +339,64 @@ public class Operator {
 			removeFrame.pack();
 			removeFrame.setVisible(true);
 		}
-		
+
 		class Cancel implements ActionListener {
-			
-			public void actionPerformed(ActionEvent arg0){
+
+			public void actionPerformed(ActionEvent arg0) {
 				removeFrame.setVisible(false);
 			}
+
+		}
+
+		class Apply implements ActionListener {
+
+			public void actionPerformed(ActionEvent arg0) {
+				mainTextField.setText("");
+				if (!database.checkBarcodeRegistered(textFields[0].getText())) {
+					JOptionPane.showMessageDialog(null,
+							"Det finns ingen cykelägare med denna streckkod",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+				} else if (textFields[0].getText().equals("")
+						|| textFields[1].getText().equals("")) {
+
+					JOptionPane.showMessageDialog(null,
+							"Var vänlig fyll i alla uppgifter",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+
+				} else if (database.getUserByBarcode(textFields[0].getText())
+						.getBikesInGarage() > 0) {
+					if(JOptionPane
+							.showConfirmDialog(
+									null,
+									"Cykelägaren har cyklar i garaget.\nÄr du säker på att du vill ta bort cykelägaren?",
+									"Felmeddelande", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+						delete();
+					}
+
+				} else {
+					delete();
+				}
+			}
 			
+			public void delete() {
+				User u = database.getUserByBarcode(textFields[0].getText());
+				database.removeUser(textFields[0].getText());
+
+				StringBuilder sb = new StringBuilder();
+
+				sb.append("Cykelägaren har tagits bort \n");
+				sb.append("Namn: ");
+				sb.append(u.getName() + "\n");
+
+				for (int i = 0; i < textFields.length; i++) {
+					sb.append(labels[i]);
+					sb.append(textFields[i].getText() + "\n");
+				}
+
+				mainTextField.setText(sb.toString());
+
+				removeFrame.setVisible(false);
+			}
 		}
 	}
 
@@ -357,9 +410,9 @@ public class Operator {
 	public User getUser(String barcode) {
 		return null;
 	}
-	
-	public boolean running(){
-		if(frame.isVisible()){
+
+	public boolean running() {
+		if (frame.isVisible()) {
 			return true;
 		}
 		return false;
@@ -388,7 +441,7 @@ public class Operator {
 	public static void main(String[] args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase();
 		Operator main = new Operator(database);
-		while(main.running()){
+		while (main.running()) {
 			try {
 				Thread.sleep(4000);
 			} catch (InterruptedException e) {
