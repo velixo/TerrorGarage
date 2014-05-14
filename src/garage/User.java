@@ -81,4 +81,8 @@ public class User{
 	public void setName(String n){
 		name = n;
 	}
+	
+	public void modBikesInGarage(int m){
+		bikesInGarage+=m;
+	}
 }

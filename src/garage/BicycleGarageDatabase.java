@@ -1,9 +1,6 @@
 package garage;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 
@@ -14,9 +11,9 @@ public class BicycleGarageDatabase {
 	private LinkedList<RetrievalOrder> orders;
 	
 	private String savedir;
+	private int capacity;
 	
-	
-	public BicycleGarageDatabase(){
+	public BicycleGarageDatabase(int cap){
 		//TODO;
 		barcodeMap = new HashMap<String, User>();
 		pinMap = new HashMap<String, LinkedList<User>>();
@@ -57,18 +54,8 @@ public class BicycleGarageDatabase {
 		return barcodeMap.get(barcode);
 	}
 	public User getUserByName(String name){
-		
-		//Vilhelms förslag
-		Iterator<User> usersIterator = barcodeMap.values().iterator();
-		while (usersIterator.hasNext()) {
-			User u = usersIterator.next();
-			if (u.getName() == name) {	//DETTA KOMMER GE ATT FÖRSTA USERN SOM HAR SAMMA NAMN RETURNERAS.
-				return getUserByBarcode(u.getBarcode());
-			}
-		}
+		//TODO
 		return null;
-		//End of Vilhelms förslag
-		
 	}
 	public LinkedList<User> getUsers(String pin){
 		return pinMap.get(pin);
@@ -102,18 +89,18 @@ public class BicycleGarageDatabase {
 		}
 		pinMap.get(newPin).add(u);
 	}
-	
+	//TODO snygga till.
 	public void removeUser(String barcode){
-		User u = barcodeMap.get(barcode);
-		pinMap.remove(u.getPin());
-//		pinMap.get(pin).remove(barcodeMap.get(barcode));
+		String pin = barcodeMap.get(barcode).getPin();
+		pinMap.get(pin).remove(barcodeMap.get(barcode));
 		barcodeMap.remove(barcode);
 	}
 	
-	//*****************ADD FOLLOWING TO DESIGNDOC************************************
+	//TODO*****************ADD FOLLOWING TO DESIGNDOC************************************
 	
-	public void modifyBikesInGarage(){
+	public void modifyBikesInGarage(String barcode, int modifier){
 		//TODO
+		barcodeMap.get(barcode).modBikesInGarage(modifier);
 	}
 	
 	
