@@ -112,8 +112,9 @@ public class Operator {
 		about.add(showAbout);
 
 		add = new JButton("Lägg till cykelägare");
-		add.addActionListener(new AddBikeOwner());
+		add.addActionListener(new AddUser());
 		edit = new JButton("Redigera cykelägare");
+		edit.addActionListener(new EditUser());
 		remove = new JButton("Ta bort cykelägare");
 		remove.addActionListener(new RemoveUser());
 
@@ -142,7 +143,7 @@ public class Operator {
 		frame.pack();
 	}
 
-	class AddBikeOwner implements ActionListener {
+	class AddUser implements ActionListener {
 
 		private JFrame addFrame;
 		private JTextField[] textFields;
@@ -344,8 +345,6 @@ public class Operator {
 			public void actionPerformed(ActionEvent arg0) {
 				removeFrame.setVisible(false);
 			}
-
-<<<<<<< HEAD
 		}
 
 		class Apply implements ActionListener {
@@ -365,11 +364,12 @@ public class Operator {
 
 				} else if (database.getUserByBarcode(textFields[0].getText())
 						.getBikesInGarage() > 0) {
-					if(JOptionPane
+					if (JOptionPane
 							.showConfirmDialog(
 									null,
 									"Cykelägaren har cyklar i garaget.\nÄr du säker på att du vill ta bort cykelägaren?",
-									"Felmeddelande", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+									"Felmeddelande",
+									JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
 						delete();
 					}
 
@@ -377,7 +377,7 @@ public class Operator {
 					delete();
 				}
 			}
-			
+
 			public void delete() {
 				User u = database.getUserByBarcode(textFields[0].getText());
 				database.removeUser(textFields[0].getText());
@@ -397,9 +397,191 @@ public class Operator {
 
 				removeFrame.setVisible(false);
 			}
-=======
->>>>>>> 79cc7d59b0be69a83a542b1862315e278b67524c
 		}
+	}
+
+	class EditUser implements ActionListener {
+
+		private JFrame editFrame;
+		private JTextField[] textFields;
+		private String[] labels = { "Cykelägarens streckkodsnummer: ", "Namn: " };
+		private User u;
+		private JTextField[] textSubFields;
+		private JFrame editSubFrame;
+
+		public void actionPerformed(ActionEvent e) {
+			int numPairs = labels.length;
+
+			textFields = new JTextField[labels.length];
+			JPanel p = new JPanel(new SpringLayout());
+			for (int i = 0; i < numPairs; i++) {
+				JLabel l = new JLabel(labels[i], JLabel.TRAILING);
+				p.add(l);
+				JTextField textField = new JTextField(10);
+				textFields[i] = textField;
+				l.setLabelFor(textField);
+				p.add(textField);
+			}
+
+			SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
+
+			editFrame = new JFrame("SpringForm");
+			editFrame.setLayout(new BorderLayout());
+			editFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+			p.setOpaque(true);
+			editFrame.add(p, BorderLayout.CENTER);
+
+			JPanel buttons = new JPanel();
+			buttons.setLayout(new BorderLayout());
+
+			JButton cancel = new JButton("Avbryt");
+			cancel.addActionListener(new Cancel());
+			//
+			JButton apply = new JButton("Sök");
+			apply.addActionListener(new Apply());
+
+			buttons.add(cancel, BorderLayout.LINE_START);
+			buttons.add(apply, BorderLayout.LINE_END);
+
+			editFrame.add(buttons, BorderLayout.SOUTH);
+			editFrame.pack();
+			editFrame.setVisible(true);
+		}
+
+		class Cancel implements ActionListener {
+
+			public void actionPerformed(ActionEvent arg0) {
+				editFrame.setVisible(false);
+			}
+		}
+
+		class Apply implements ActionListener {
+
+			private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
+					"Telefonnummer: ", "Antal Streckkodskopior: ",
+					"Antal cyklar i garaget: " };
+
+			public void actionPerformed(ActionEvent e) {
+				editFrame.setVisible(false);
+				u = database.getUserByBarcode(textFields[0].getText());
+
+				if (u != null) {
+
+					int numPairs = labels.length;
+
+					textSubFields = new JTextField[labels.length];
+					JPanel p = new JPanel(new SpringLayout());
+					for (int i = 0; i < numPairs; i++) {
+						JLabel l = new JLabel(labels[i], JLabel.TRAILING);
+						p.add(l);
+						JTextField textField = new JTextField(10);
+						textSubFields[i] = textField;
+						l.setLabelFor(textField);
+						p.add(textField);
+					}
+
+					textSubFields[0].setText(u.getPin());
+					textSubFields[1].setText(u.getBarcode());
+					textSubFields[2].setText(u.getName());
+					textSubFields[3].setText(u.getTelNr());
+					textSubFields[5].setText(String.valueOf(u
+							.getBikesInGarage()));
+
+					SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
+
+					editSubFrame = new JFrame("SpringForm");
+					editSubFrame.setLayout(new BorderLayout());
+					editSubFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+					p.setOpaque(true);
+					editSubFrame.add(p, BorderLayout.CENTER);
+
+					JPanel buttons = new JPanel();
+					buttons.setLayout(new BorderLayout());
+
+					JButton cancel = new JButton("Avbryt");
+					cancel.addActionListener(new Cancel());
+
+					JButton apply = new JButton("Verkställ");
+					apply.addActionListener(new SubApply());
+
+					JButton generate = new JButton("Generera");
+					generate.addActionListener(new Generate());
+
+					buttons.add(cancel, BorderLayout.LINE_START);
+					buttons.add(apply, BorderLayout.LINE_END);
+					buttons.add(generate, BorderLayout.SOUTH);
+
+					editSubFrame.add(buttons, BorderLayout.SOUTH);
+					editSubFrame.pack();
+					editSubFrame.setVisible(true);
+
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Var vänlig fyll i alla uppgifter",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+
+		}
+
+		class Generate implements ActionListener {
+
+			private Random rand = new Random();
+			private String newPin;
+
+			public void actionPerformed(ActionEvent arg0) {
+
+				StringBuilder pinBuilder = new StringBuilder();
+
+				for (int i = 0; i < 4; i++) {
+					int a = rand.nextInt(10);
+					pinBuilder.append(String.valueOf(a));
+				}
+
+				newPin = pinBuilder.toString();
+				textSubFields[0].setText(newPin);
+
+				while (database.checkPinRegistered(newPin)) {
+					pinBuilder.delete(0, 4);
+
+					for (int i = 0; i < 4; i++) {
+						int a = rand.nextInt(10);
+						pinBuilder.append(String.valueOf(a));
+					}
+
+					newPin = pinBuilder.toString();
+				}
+			}
+		}
+
+		class SubApply implements ActionListener {
+
+			public void actionPerformed(ActionEvent e) {
+
+				database.removeUser(u.getBarcode());
+				database.addUser(textSubFields[0].getText(),
+						textSubFields[1].getText(), textSubFields[2].getText(),
+						textSubFields[3].getText());
+				database.modifyBikesInGarage();
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("Cykelägaren har redigerats\nPIN: " + u.getPin()
+						+ " -> " + textSubFields[0].getText() + "\nStreckkod: "
+						+ u.getBarcode() + " -> " + textSubFields[1].getText()
+						+ "\nNamn: " + u.getName() + " -> "
+						+ textSubFields[2].getText() + "\nTelNr: "
+						+ u.getTelNr() + " -> " + textSubFields[3].getText()
+						+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
+						+ " -> " + textSubFields[5].getText());
+				mainTextField.setText("");
+				mainTextField.setText(sb.toString());
+				editSubFrame.setVisible(false);
+			}
+
+		}
+
 	}
 
 	/**
@@ -442,7 +624,8 @@ public class Operator {
 
 	public static void main(String[] args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase();
-		Operator main = new Operator(database);
+		BicycleGarageManager manager = new BicycleGarageManager(database);
+		Operator main = new Operator(database, manager);
 		while (main.running()) {
 			try {
 				Thread.sleep(4000);
