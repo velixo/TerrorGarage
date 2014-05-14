@@ -291,7 +291,6 @@ public class Operator {
 				textFields[1].setText(newBarcode);
 			}
 		}
-
 	}
 
 	class RemoveUser implements ActionListener {
@@ -346,6 +345,7 @@ public class Operator {
 				removeFrame.setVisible(false);
 			}
 
+<<<<<<< HEAD
 		}
 
 		class Apply implements ActionListener {
@@ -397,6 +397,8 @@ public class Operator {
 
 				removeFrame.setVisible(false);
 			}
+=======
+>>>>>>> 79cc7d59b0be69a83a542b1862315e278b67524c
 		}
 	}
 
