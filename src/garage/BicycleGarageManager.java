@@ -24,7 +24,6 @@ public class BicycleGarageManager {
 	 *           maximala mängden cyklar som får plats i garaget
 	 */
 	public BicycleGarageManager(int capacity, BicycleGarageDatabase database) {
-		charCollecter = new PinCharCollector(database, null);
 		this.database = database;
 		capacity = 0;
 		bikesInGarage = 0;
@@ -49,7 +48,7 @@ public class BicycleGarageManager {
 		this.entryLock = entryLock;
 		this.exitLock = exitLock;
 		this.terminal = terminal;
-		charCollecter = new PinCharCollector(database, terminal);
+		charCollecter = new PinCharCollector(database, this.terminal, this.entryLock);
 
 	}
 
@@ -98,9 +97,19 @@ public class BicycleGarageManager {
 	 * Registrerar databasen som skall användas.
 	 * 
 	 * @param database
-	 *            databasen som ska registreras
+	 *			databasen som ska registreras
 	 */
 	public void registerDatabase(BicycleGarageDatabase database) {
 		this.database = database;
+	}
+	
+	/** 
+	 * Skriver ut streckkoden barcode.
+	 * 
+	 * @param barcode
+	 * 		streckkoden som ska skrivas ut
+	 */
+	public void print(String barcode) {
+		printer.printBarcode(barcode);
 	}
 }
