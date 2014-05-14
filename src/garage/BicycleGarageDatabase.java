@@ -1,6 +1,7 @@
 package garage;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 
@@ -11,6 +12,7 @@ public class BicycleGarageDatabase {
 	private LinkedList<RetrievalOrder> orders;
 	
 	private String savedir;
+	private int bikesInside;
 	private int capacity;
 	
 	public BicycleGarageDatabase(int cap){
@@ -19,6 +21,8 @@ public class BicycleGarageDatabase {
 		pinMap = new HashMap<String, LinkedList<User>>();
 		orders = new LinkedList<RetrievalOrder>();
 		savedir = "garagedata";
+		capacity = cap;
+		bikesInside = 0;
 	}
 	
 	public boolean checkBarcodeRegistered(String barcode){
@@ -60,8 +64,17 @@ public class BicycleGarageDatabase {
 	}
 	
 	public User getUserByName(String name){
-		//TODO
-		return null;
+		//Vilhelms förslag
+	Iterator<User> usersIterator = barcodeMap.values().iterator();
+	while (usersIterator.hasNext()) {
+		User u = usersIterator.next();
+		if (u.getName() == name) {	//DETTA KOMMER GE ATT FÖRSTA USERN SOM HAR SAMMA NAMN RETURNERAS.
+			return getUserByBarcode(u.getBarcode());
+		}
+	}
+	return null;
+	//End of Vilhelms förslag
+		
 	}
 	
 	public LinkedList<User> getUsers(String pin){
@@ -110,6 +123,7 @@ public class BicycleGarageDatabase {
 	
 	public void modifyBikesInGarage(String barcode, int modifier){
 		barcodeMap.get(barcode).modBikesInGarage(modifier);
+		bikesInside += modifier;
 	}
 	
 	
