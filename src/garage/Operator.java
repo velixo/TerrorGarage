@@ -289,7 +289,6 @@ public class Operator {
 				textFields[1].setText(newBarcode);
 			}
 		}
-
 	}
 
 	class RemoveUser implements ActionListener {
@@ -337,13 +336,13 @@ public class Operator {
 			removeFrame.pack();
 			removeFrame.setVisible(true);
 		}
-		
+
 		class Cancel implements ActionListener {
-			
-			public void actionPerformed(ActionEvent arg0){
+
+			public void actionPerformed(ActionEvent arg0) {
 				removeFrame.setVisible(false);
 			}
-			
+
 		}
 	}
 
@@ -357,9 +356,9 @@ public class Operator {
 	public User getUser(String barcode) {
 		return null;
 	}
-	
-	public boolean running(){
-		if(frame.isVisible()){
+
+	public boolean running() {
+		if (frame.isVisible()) {
 			return true;
 		}
 		return false;
@@ -388,7 +387,7 @@ public class Operator {
 	public static void main(String[] args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase();
 		Operator main = new Operator(database);
-		while(main.running()){
+		while (main.running()) {
 			try {
 				Thread.sleep(4000);
 			} catch (InterruptedException e) {
