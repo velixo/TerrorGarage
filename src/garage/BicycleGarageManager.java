@@ -7,8 +7,6 @@ import drivers.PinCodeTerminal;
 //import drivers;
 
 public class BicycleGarageManager {
-	private int capacity;
-	private	int bikesInGarage;
 	private PinCharCollector charCollecter;
 	private ElectronicLock entryLock;
 	private ElectronicLock exitLock;
@@ -20,13 +18,11 @@ public class BicycleGarageManager {
 	/**
 	 * Konstruktorn för en BicycleGarageManager.
 	 *
-	 * @param capacity
-	 *           maximala mängden cyklar som får plats i garaget
+	 * @param database
+	 *           cykelgaragets databas
 	 */
-	public BicycleGarageManager(int capacity, BicycleGarageDatabase database) {
+	public BicycleGarageManager(BicycleGarageDatabase database) {
 		this.database = database;
-		capacity = 0;
-		bikesInGarage = 0;
 	}
 	
 	
@@ -61,8 +57,8 @@ public class BicycleGarageManager {
 	 *            cykelns streckkod
 	 */
 	public void entryBarcode(String barcode) {
-		if (bikesInGarage < capacity && database.checkBarcodeRegistered(barcode)) {
-			bikesInGarage++;
+		if (database.checkBarcodeRegistered(barcode) && !database.isGarageFull()) {
+			database.modifyBikesInGarage(barcode, 1);
 			entryLock.open(10);
 		}
 	}
@@ -77,7 +73,7 @@ public class BicycleGarageManager {
 	 */
 	public void exitBarcode(String barcode) {
 		if (database.checkBarcodeRegistered(barcode) && database.checkBikeRetrievable(barcode)) {
-			bikesInGarage--;
+			database.modifyBikesInGarage(barcode, -1);
 			exitLock.open(10);
 		}
 	}
