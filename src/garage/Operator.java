@@ -23,6 +23,8 @@ import javax.swing.KeyStroke;
 import javax.swing.SpringLayout;
 
 import springUtilities.SpringUtilities;
+import testDrivers.BarcodeReaderEntryTestDriver;
+import testDrivers.BarcodeReaderExitTestDriver;
 
 public class Operator {
 
@@ -34,9 +36,15 @@ public class Operator {
 	private JButton add, edit, remove;
 	private JMenu settings, view, about;
 	private JMenuBar menuBar;
-	private JMenuItem options, showBarcodeReader, showBarcodeWrite, showPIN,
+	private JMenuItem options, showBarcodeReaderEntry, showBarcodeReaderExit, showBarcodeWrite, showPIN,
 			showLock, showAbout;
+	private BarcodeReaderEntryTestDriver entryReader;
+	private BarcodeReaderExitTestDriver exitReader;
+	private boolean brexit = false;
+	private boolean brentry = false;
 
+	
+	
 	/**
 	 * Skapar ett GUI med alla knappar, fönster och dylikt som ska finnas med i
 	 * operatörprogrammet.
@@ -81,11 +89,19 @@ public class Operator {
 				"This doesn't really do anything");
 		settings.add(options);
 
-		showBarcodeReader = new JCheckBoxMenuItem("Visa streckkodsläsare");
-		showBarcodeReader.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
+		showBarcodeReaderEntry = new JCheckBoxMenuItem("Visa streckkodsläsare (ingång)");
+		showBarcodeReaderEntry.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
 				ActionEvent.CTRL_MASK));
-		showBarcodeReader.getAccessibleContext().setAccessibleDescription("");
-		view.add(showBarcodeReader);
+		showBarcodeReaderEntry.getAccessibleContext().setAccessibleDescription("");
+//		showBarcodeReaderEntry.addActionListener(new ShowBarcodeReaderEntry());
+		view.add(showBarcodeReaderEntry);
+		
+		showBarcodeReaderExit = new JCheckBoxMenuItem("Visa streckkodsläsare (utgång)");
+		showBarcodeReaderExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
+				ActionEvent.CTRL_MASK));
+		showBarcodeReaderExit.getAccessibleContext().setAccessibleDescription("");
+//		showBarcodeReaderExit.addActionListener(new ShowBarcodeReaderExit());
+		view.add(showBarcodeReaderExit);
 
 		showBarcodeWrite = new JCheckBoxMenuItem("Visa streckkodsskrivare");
 		showBarcodeWrite.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
@@ -141,8 +157,48 @@ public class Operator {
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		frame.add(textPanel, BorderLayout.CENTER);
 		frame.pack();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
+// KANSKE HA MED DETTA: FET EJ
+//	
+//	class ShowBarcodeReaderEntry implements ActionListener {
+//
+//
+//		
+//		@Override
+//		public void actionPerformed(ActionEvent arg0) {
+//			brentry =! brentry;
+//			if (!brentry){
+//				entryReader = null;
+//			} else {
+//				entryReader = new BarcodeReaderEntryTestDriver();
+//			}
+//		}
+//		
+//	}
+//	
+//	class ShowBarcodeReaderExit implements ActionListener {
+//
+//
+//
+//		
+//		@Override
+//		public void actionPerformed(ActionEvent arg0) {
+//			brexit =! brexit;
+//			if (!brexit){
+//				exitReader = null;
+//			} else {
+//				exitReader = new BarcodeReaderExitTestDriver();
+//			}
+//		}
+//		
+//	}
+//	
 	class AddUser implements ActionListener {
 
 		private JFrame addFrame;
@@ -564,7 +620,7 @@ public class Operator {
 				database.addUser(textSubFields[0].getText(),
 						textSubFields[1].getText(), textSubFields[2].getText(),
 						textSubFields[3].getText());
-				database.modifyBikesInGarage();
+//				database.modifyBikesInGarage();
 
 				StringBuilder sb = new StringBuilder();
 				sb.append("Cykelägaren har redigerats\nPIN: " + u.getPin()
@@ -623,7 +679,7 @@ public class Operator {
 	}
 
 	public static void main(String[] args) {
-		BicycleGarageDatabase database = new BicycleGarageDatabase();
+		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
 		BicycleGarageManager manager = new BicycleGarageManager(database);
 		Operator main = new Operator(database, manager);
 		while (main.running()) {
