@@ -10,11 +10,5 @@
                
                
                LYSTRING, TESTARE!
-               Ni som kanske inte har använt github kanske får
-               för er att försöka ctrl+c, ctrl+v:a ner koden
-               här som ett gäng neandertalare. Installera
-               istället Git som folk och använd git Clone
-               får att få ner hela repon.
-               
-               Tutorial:
-               https://help.github.com/articles/set-up-git
+               här kan ni ladda ner hela grejen:
+https://github.com/voidcase/TerrorGarage/archive/2c09a6fc2fc6a33dd428d4b19781b490adea0a01.zip
