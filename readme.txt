@@ -7,3 +7,14 @@
 |___|                                                     __/ |   |___|
                                                          |___/         
                Isak | Shan | Maja | Rasha | Ville | Axel
+               
+               
+               LYSTRING, TESTARE!
+               Ni som kanske inte har använt github kanske får
+               för er att försöka ctrl+c, ctrl+v:a ner koden
+               här som ett gäng neandertalare. Installera
+               istället Git som folk och använd git Clone
+               får att få ner hela repon.
+               
+               Tutorial:
+               https://help.github.com/articles/set-up-git
