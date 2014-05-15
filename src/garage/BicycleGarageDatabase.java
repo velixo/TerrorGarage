@@ -125,7 +125,7 @@ public class BicycleGarageDatabase {
 		barcodeMap.get(barcode).modBikesInGarage(modifier);
 		bikesInside += modifier;
 	}
-	public boolean garageIsFull(){
+	public boolean isGarageFull(){
 		return bikesInside>=capacity;
 	}
 	
