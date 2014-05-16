@@ -291,6 +291,10 @@ public class Operator {
 					}
 
 					mainTextField.setText(sb.toString());
+					
+					int barcodeCopies = Integer.valueOf(textFields[4].getText());
+					String barcode = textFields[1].getText();
+					print(barcode, barcodeCopies);
 
 					addFrame.setVisible(false);
 				}
@@ -633,6 +637,11 @@ public class Operator {
 						+ " -> " + textSubFields[5].getText());
 				mainTextField.setText("");
 				mainTextField.setText(sb.toString());
+				
+				int barcodeCopies = Integer.valueOf(textSubFields[4].getText());
+				String barcode = textSubFields[1].getText();
+				print(barcode, barcodeCopies);
+				
 				editSubFrame.setVisible(false);
 			}
 
@@ -692,5 +701,14 @@ public class Operator {
 		}
 		System.exit(0);
 
+	}
+	
+	private void print(String barcode, int barcodeCopies) {
+		if (barcodeCopies > 0) {						
+			for (int i = 0; i < barcodeCopies; i++) {
+				manager.print(barcode);
+//				System.out.println("Streckkodskopia nr: " + i);
+			}
+		}
 	}
 }
