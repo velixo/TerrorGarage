@@ -55,6 +55,12 @@ public class Operator {
 	public Operator(BicycleGarageDatabase database, BicycleGarageManager manager) {
 		this.database = database;
 		this.manager = manager;
+		
+		//Autosavingthreaden start
+		AutosaveTask task = new AutosaveTask(4);
+		Thread autoSaveThread = new Thread(task);
+		autoSaveThread.start();
+		//Autosavingthreaden slut
 
 		buttonPanel = new JPanel();
 		buttonPanel.setVisible(true);
@@ -692,21 +698,21 @@ public class Operator {
 //		return null;
 //	}
 
-	public static void main(String[] args) {
-		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
-		BicycleGarageManager manager = new BicycleGarageManager(database);
-		Operator main = new Operator(database, manager);
-		while (main.running()) {
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			continue;
-		}
-		System.exit(0);
-
-	}
+//	public static void main(String[] args) {
+//		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
+//		BicycleGarageManager manager = new BicycleGarageManager(database);
+//		Operator main = new Operator(database, manager);
+//		while (main.running()) {
+//			try {
+//				Thread.sleep(4000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			continue;
+//		}
+//		System.exit(0);
+//
+//	}
 	
 	private void print(String barcode, int barcodeCopies) {
 		if (barcodeCopies > 0) {						
@@ -714,6 +720,31 @@ public class Operator {
 				manager.print(barcode);
 //				System.out.println("Streckkodskopia nr: " + i);
 			}
+		}
+	}
+	
+	
+	private class AutosaveTask implements Runnable {
+		private volatile long saveFrequency;
+		
+		/** 
+		 *  @param saveFrequency
+		 *  	hur många sekunder det är mellan varje gång databasen autosparas
+		 * */
+		public AutosaveTask(long saveFrequency) {
+			this.saveFrequency = saveFrequency;
+		}
+		
+		public void run () {
+			try {
+				Thread.sleep(saveFrequency * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		} 
+		
+		public void editSaveFrequency(long saveFrequency) {
+			this.saveFrequency = saveFrequency;
 		}
 	}
 }
