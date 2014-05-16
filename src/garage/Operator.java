@@ -292,9 +292,11 @@ public class Operator {
 
 					mainTextField.setText(sb.toString());
 					
-					int barcodeCopies = Integer.valueOf(textFields[4].getText());
-					String barcode = textFields[1].getText();
-					print(barcode, barcodeCopies);
+					if (textFields[4].getText() != "") {
+						int barcodeCopies = Integer.valueOf(textFields[4].getText());
+						String barcode = textFields[1].getText();
+						print(barcode, barcodeCopies);						
+					}
 
 					addFrame.setVisible(false);
 				}
@@ -545,7 +547,7 @@ public class Operator {
 					textSubFields[1].setText(u.getBarcode());
 					textSubFields[2].setText(u.getName());
 					textSubFields[3].setText(u.getTelNr());
-					textSubFields[4].setText("0");		//Rasha: om det inte står 0 i antal streckkodskopior när man verkställer får man bugg: "Exception in thread "AWT-EventQueue-0" java.lang.NumberFormatException: For input string " " "
+					textSubFields[4].setText("0");		//kan vara bra att det står så från början
 					textSubFields[5].setText(String.valueOf(u
 							.getBikesInGarage()));
 
@@ -639,9 +641,11 @@ public class Operator {
 				mainTextField.setText("");
 				mainTextField.setText(sb.toString());
 				
-				int barcodeCopies = Integer.valueOf(textSubFields[4].getText());
-				String barcode = textSubFields[1].getText();
-				print(barcode, barcodeCopies);
+				if (textSubFields[4].getText() != "") {			//fixade bugg #4
+					int barcodeCopies = Integer.valueOf(textSubFields[4].getText());
+					String barcode = textSubFields[1].getText();
+					print(barcode, barcodeCopies);					
+				}
 				
 				editSubFrame.setVisible(false);
 			}
