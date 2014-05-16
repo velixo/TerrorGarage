@@ -18,5 +18,5 @@
                5: Ändra root directory till projektmappen
                6. Klicka Finish! :)
                
-               *vi kodare är inte ansvariga för om datorn fryser, tappar vissa funktionaliteter eller om du och din katt dör*
+               *vi kodare är inte ansvariga för om datorn fryser, tappar vissa funktionaliteter eller om du och din katt dör eller om Danskarna invaderar. *
                
