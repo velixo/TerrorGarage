@@ -90,6 +90,7 @@ public class PinCharCollector {
 			
 		} else if (pinCharList.length() >= 4) {			// pinkod har matats in, kolla om pinen är registrerad. är den det, lås upp dörren.
 			String pin = pinCharList.substring(0, 4);
+			clear();
 			if (database.checkPinRegistered(pin)) {				
 				database.setBikesRetrievable(pin);
 				entryLock.open(10);
