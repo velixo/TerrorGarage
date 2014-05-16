@@ -10,5 +10,4 @@
                
                
                LYSTRING, TESTARE!
-               h�r kan ni ladda ner hela grejen:
-https://github.com/voidcase/TerrorGarage/archive/2c09a6fc2fc6a33dd428d4b19781b490adea0a01.zip
+               klicka på lilla ZIP-bilden till höger för att ladda ner programmet!
