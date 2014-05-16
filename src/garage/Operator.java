@@ -545,6 +545,7 @@ public class Operator {
 					textSubFields[1].setText(u.getBarcode());
 					textSubFields[2].setText(u.getName());
 					textSubFields[3].setText(u.getTelNr());
+					textSubFields[4].setText("0");		//Rasha: om det inte står 0 i antal streckkodskopior när man verkställer får man bugg: "Exception in thread "AWT-EventQueue-0" java.lang.NumberFormatException: For input string " " "
 					textSubFields[5].setText(String.valueOf(u
 							.getBikesInGarage()));
 
