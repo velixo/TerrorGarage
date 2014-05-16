@@ -547,7 +547,7 @@ public class Operator {
 					textSubFields[1].setText(u.getBarcode());
 					textSubFields[2].setText(u.getName());
 					textSubFields[3].setText(u.getTelNr());
-					textSubFields[4].setText("0");		//kan vara bra att det står så från början
+//					textSubFields[4].setText("0");		//kan vara bra att det står så från början
 					textSubFields[5].setText(String.valueOf(u
 							.getBikesInGarage()));
 
