@@ -641,7 +641,7 @@ public class Operator {
 				mainTextField.setText("");
 				mainTextField.setText(sb.toString());
 				
-				if (textFields[4].getText() != "" || textFields[4].getText() != " ") {			//fixade bugg #4
+				if (textSubFields[4].getText() != "" || textSubFields[4].getText() != " ") {			//fixade bugg #4
 					int barcodeCopies = Integer.valueOf(textSubFields[4].getText());
 					String barcode = textSubFields[1].getText();
 					print(barcode, barcodeCopies);					
