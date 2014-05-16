@@ -129,6 +129,7 @@ public class BicycleGarageDatabase {
 					addUser(pin,bc,n,tel);
 					modifyBikesInGarage(bc, big);
 					
+					s.close();
 				} catch (FileNotFoundException e) {
 					//nåt ble fel me filläsandet.
 				} catch (NumberFormatException e) {
