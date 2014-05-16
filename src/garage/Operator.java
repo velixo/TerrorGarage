@@ -649,16 +649,16 @@ public class Operator {
 
 	}
 
-	/**
-	 * Returnerar en specifik cykelägare.
-	 * 
-	 * @param barcode
-	 *            cykelägarens streckkod
-	 * @return cykelägaren
-	 */
-	public User getUser(String barcode) {
-		return null;
-	}
+//	/**
+//	 * Returnerar en specifik cykelägare.
+//	 * 
+//	 * @param barcode
+//	 *            cykelägarens streckkod
+//	 * @return cykelägaren
+//	 */
+//	public User getUser(String barcode) {
+//		return null;
+//	}
 
 	public boolean running() {
 		if (frame.isVisible()) {
@@ -674,18 +674,18 @@ public class Operator {
 	 *            cykelägarens namn
 	 * @return cykelägarens streckkod
 	 */
-	public String findBarcodeWithName(String name) {
-		return null;
-	}
+//	public String findBarcodeWithName(String name) {
+//		return null;
+//	}
 
 	/**
 	 * Genererar en ny 4-siffrig PIN-kod.
 	 * 
 	 * @return ny PIN-kod
 	 */
-	public String GeneratePin() {
-		return null;
-	}
+//	public String GeneratePin() {
+//		return null;
+//	}
 
 	public static void main(String[] args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
