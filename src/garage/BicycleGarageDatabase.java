@@ -3,6 +3,7 @@ package garage;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
 import java.io.*;
 
 
@@ -116,6 +117,24 @@ public class BicycleGarageDatabase {
 		File userdir = new File(savedir);
 		if(userdir.exists()){
 			for(File f : userdir.listFiles()){
+				try {
+					Scanner s = new Scanner(f);
+					
+					String bc = s.nextLine();
+					String n = s.nextLine();
+					String tel = s.nextLine();
+					String pin = s.nextLine();
+					int big = Integer.parseInt(s.nextLine());
+					
+					addUser(pin,bc,n,tel);
+					modifyBikesInGarage(bc, big);
+					
+				} catch (FileNotFoundException e) {
+					//nåt ble fel me filläsandet.
+				} catch (NumberFormatException e) {
+					//hur fan blir bikesInGarage fel?
+				}
+				
 				
 			}
 		}
