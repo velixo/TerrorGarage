@@ -3,6 +3,8 @@ package garage;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
+import java.io.*;
 
 
 public class BicycleGarageDatabase {
@@ -85,8 +87,58 @@ public class BicycleGarageDatabase {
 		//TODO;
 	}
 	
+	public void save(String barcode){
+		File userdir = new File(savedir);
+		if(!userdir.exists()){
+			userdir.mkdir();
+		}
+		try {
+			FileWriter fw = new FileWriter(savedir + "/" + barcode);
+			User u = barcodeMap.get(barcode);
+			fw.write("" +
+					u.getBarcode() + "\n" +
+					u.getName() + "\n" + 
+					u.getTelNr() + "\n" + 
+					u.getPin() + "\n" + 
+					u.getBikesInGarage());
+			
+			//FELVARNING! KAN MÖJLIGTVIS STÄNGA STREAMEN PERMANENT SÅ ATT DET INTE GÅR ATT SKRIVA TILL FILEN IGEN FÖRENS PROGRAMMET STARTAS OM.
+			fw.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 	public void load(){
-		//TODO;
+		File userdir = new File(savedir);
+		if(userdir.exists()){
+			for(File f : userdir.listFiles()){
+				try {
+					Scanner s = new Scanner(f);
+					
+					String bc = s.nextLine();
+					String n = s.nextLine();
+					String tel = s.nextLine();
+					String pin = s.nextLine();
+					int big = Integer.parseInt(s.nextLine());
+					
+					addUser(pin,bc,n,tel);
+					modifyBikesInGarage(bc, big);
+					
+					s.close();
+				} catch (FileNotFoundException e) {
+					//nåt ble fel me filläsandet.
+				} catch (NumberFormatException e) {
+					//hur fan blir bikesInGarage fel?
+				}
+				
+				
+			}
+		}
 	}
 	
 	public void setDirectory(String dir){
