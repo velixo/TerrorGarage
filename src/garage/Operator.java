@@ -55,6 +55,7 @@ public class Operator {
 	public Operator(BicycleGarageDatabase database, BicycleGarageManager manager) {
 		this.database = database;
 		this.manager = manager;
+		database.load();
 		
 		//Autosavingthreaden start
 		AutosaveTask task = new AutosaveTask(4);
