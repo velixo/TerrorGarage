@@ -54,12 +54,12 @@ public class BicycleGarageDatabase {
 		String thePin = barcodeMap.get(barcode).getPin();
 		for(RetrievalOrder o : orders){
 			//Testers: watch out for NoSuchElement.
-			if(o.getPin().equals(thePin)){
+			if(o.getExpMillis()>System.currentTimeMillis()){
+				orders.remove(o);
+			}
+			else if(o.getPin().equals(thePin)){
 				orders.remove(o);
 				return true;
-			}
-			else if(o.getExpMillis()>System.currentTimeMillis()){
-				orders.remove(o);
 			}
 		}
 		return false;
@@ -126,6 +126,7 @@ public class BicycleGarageDatabase {
 	public void load(){
 		File userdir = new File(savedir);
 		if(userdir.exists()){
+			System.out.println("save directory hittades!");
 			for(File f : userdir.listFiles()){
 				try {
 					Scanner s = new Scanner(f);
@@ -142,8 +143,10 @@ public class BicycleGarageDatabase {
 					s.close();
 				} catch (FileNotFoundException e) {
 					//nåt ble fel me filläsandet.
+					System.out.println("filenotfound");
 				} catch (NumberFormatException e) {
 					//hur fan blir bikesInGarage fel?
+					System.out.println("något är fel med bikesInGarage");
 				}
 				
 				
@@ -197,19 +200,8 @@ public class BicycleGarageDatabase {
 		barcodeMap.get(barcode).modBikesInGarage(modifier);
 		bikesInside += modifier;
 	}
+	
 	public boolean isGarageFull(){
 		return bikesInside>=capacity;
 	}
-	
-	private class TimeoutTask implements Runnable {
-		
-		public TimeoutTask(String pin) {
-			
-		}
-		
-		public void run () {
-			try
-		}
-	}
-	
 }
