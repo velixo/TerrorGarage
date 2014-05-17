@@ -114,7 +114,7 @@ public class PinCharCollector {
 	*/
 	private void clear() {
 		int length = pinCharList.length();
-		pinCharList.delete(0, length - 1);
+		pinCharList.delete(0, length);
 	}
 	
 	private class BlinkingTask implements Runnable {
