@@ -282,39 +282,39 @@ public class Operator {
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
-				} else if (textFields[0].getText().length() != 4) {
-					JOptionPane.showMessageDialog(null,
-							"PIN-koden är inte 4 siffror lång",
-							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-				} else if (textFields[1].getText().length() != 5) {
-					JOptionPane.showMessageDialog(null,
-							"Streckkoden är inte 5 siffror lång",
-							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 				} else {
-
-					database.addUser(textFields[0].getText(),
+					int addUserErrorFeedback = database.addUser(textFields[0].getText(),
 							textFields[1].getText(), textFields[2].getText(),
 							textFields[3].getText());
+					if (addUserErrorFeedback == database.PIN_LENGTH_ERROR) {
+						JOptionPane.showMessageDialog(null,
+								"PIN-koden är inte 4 siffror lång",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else if (addUserErrorFeedback == database.BARCODE_LENGTH_ERROR) {
+						JOptionPane.showMessageDialog(null,
+								"Streckkoden är inte 5 siffror lång",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else if (addUserErrorFeedback == database.NO_ADDUSER_ERROR) {
+						StringBuilder sb = new StringBuilder();
 
-					StringBuilder sb = new StringBuilder();
+						sb.append("Cykelägaren har lagts till\n");
 
-					sb.append("Cykelägaren har lagts till\n");
+						for (int i = 0; i < textFields.length; i++) {
+							sb.append(labels[i]);
+							sb.append(textFields[i].getText() + "\n");
+						}
 
-					for (int i = 0; i < textFields.length; i++) {
-						sb.append(labels[i]);
-						sb.append(textFields[i].getText() + "\n");
+						mainTextField.setText(sb.toString());
+						
+						if (textFields[4].getText() != "" || textFields[4].getText() != " ") {
+							int barcodeCopies = Integer.valueOf(textFields[4].getText());
+							String barcode = textFields[1].getText();
+							print(barcode, barcodeCopies);						
+						}
+
+						addFrame.setVisible(false);
 					}
-
-					mainTextField.setText(sb.toString());
-					
-					if (textFields[4].getText() != "" || textFields[4].getText() != " ") {
-						int barcodeCopies = Integer.valueOf(textFields[4].getText());
-						String barcode = textFields[1].getText();
-						print(barcode, barcodeCopies);						
-					}
-
-					addFrame.setVisible(false);
-				}
+				} 
 			}
 		}
 
