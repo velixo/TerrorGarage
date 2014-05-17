@@ -282,6 +282,14 @@ public class Operator {
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
+				} else if (textFields[0].getText().length() != 4) {
+					JOptionPane.showMessageDialog(null,
+							"PIN-koden är inte 4 siffror lång",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+				} else if (textFields[1].getText().length() != 4) {
+					JOptionPane.showMessageDialog(null,
+							"Streckkoden är inte 5 siffror lång",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 				} else {
 
 					database.addUser(textFields[0].getText(),
@@ -364,7 +372,6 @@ public class Operator {
 	}
 
 	class RemoveUser implements ActionListener {
-
 		private JFrame removeFrame;
 		private JTextField[] textFields;
 		private String[] labels = { "Cykelägarens streckkodsnummer: ", "PIN: " };
@@ -431,6 +438,12 @@ public class Operator {
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
+				} else if (textFields[1].getText().equals(
+						database.getUserByBarcode(textFields[0].getText()).
+						getPin())) {
+					JOptionPane.showMessageDialog(null,
+							"Den inmatade PIN-koden matcher inte PIN-koden som  är associerad med den inmatade streckkoden",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 				} else if (database.getUserByBarcode(textFields[0].getText())
 						.getBikesInGarage() > 0) {
 					if (JOptionPane
@@ -690,12 +703,12 @@ public class Operator {
 //		return null;
 //	}
 
-	public boolean running() {
-		if (frame.isVisible()) {
-			return true;
-		}
-		return false;
-	}
+//	public boolean running() {
+//		if (frame.isVisible()) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Söker efter streckkoden för en viss cykelägare.
