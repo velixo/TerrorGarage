@@ -533,65 +533,83 @@ public class Operator {
 
 			public void actionPerformed(ActionEvent e) {
 				editFrame.setVisible(false);
-				u = database.getUserByBarcode(textFields[0].getText());
-
-				if (u != null) {
-
-					int numPairs = labels.length;
-
-					textSubFields = new JTextField[labels.length];
-					JPanel p = new JPanel(new SpringLayout());
-					for (int i = 0; i < numPairs; i++) {
-						JLabel l = new JLabel(labels[i], JLabel.TRAILING);
-						p.add(l);
-						JTextField textField = new JTextField(10);
-						textSubFields[i] = textField;
-						l.setLabelFor(textField);
-						p.add(textField);
+				if (!textFields[0].getText().isEmpty()) {
+					u = database.getUserByBarcode(textFields[0].getText());
+					if (u == null) {
+						JOptionPane.showMessageDialog(null,
+								"Streckkodsnumret existerar ej",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else {						
+						findUser(u);
 					}
-
-					textSubFields[0].setText(u.getPin());
-					textSubFields[1].setText(u.getBarcode());
-					textSubFields[2].setText(u.getName());
-					textSubFields[3].setText(u.getTelNr());
-//					textSubFields[4].setText("0");		//kan vara bra att det står så från början
-					textSubFields[5].setText(String.valueOf(u
-							.getBikesInGarage()));
-
-					SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
-
-					editSubFrame = new JFrame("SpringForm");
-					editSubFrame.setLayout(new BorderLayout());
-					editSubFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-
-					p.setOpaque(true);
-					editSubFrame.add(p, BorderLayout.CENTER);
-
-					JPanel buttons = new JPanel();
-					buttons.setLayout(new BorderLayout());
-
-					JButton cancel = new JButton("Avbryt");
-					cancel.addActionListener(new Cancel());
-
-					JButton apply = new JButton("Verkställ");
-					apply.addActionListener(new SubApply());
-
-					JButton generate = new JButton("Generera");
-					generate.addActionListener(new Generate());
-
-					buttons.add(cancel, BorderLayout.LINE_START);
-					buttons.add(apply, BorderLayout.LINE_END);
-					buttons.add(generate, BorderLayout.SOUTH);
-
-					editSubFrame.add(buttons, BorderLayout.SOUTH);
-					editSubFrame.pack();
-					editSubFrame.setVisible(true);
-
+				} else if (!textFields[1].getText().isEmpty()) {
+					u = database.getUserByName(textFields[1].getText());
+					if (u == null) {
+						JOptionPane.showMessageDialog(null,
+								"Namnet existerar ej",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else {						
+						findUser(u);
+					}
 				} else {
 					JOptionPane.showMessageDialog(null,
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 				}
+
+				
+			}
+			
+			private void findUser(User u) {
+				int numPairs = labels.length;
+
+				textSubFields = new JTextField[labels.length];
+				JPanel p = new JPanel(new SpringLayout());
+				for (int i = 0; i < numPairs; i++) {
+					JLabel l = new JLabel(labels[i], JLabel.TRAILING);
+					p.add(l);
+					JTextField textField = new JTextField(10);
+					textSubFields[i] = textField;
+					l.setLabelFor(textField);
+					p.add(textField);
+				}
+
+				textSubFields[0].setText(u.getPin());
+				textSubFields[1].setText(u.getBarcode());
+				textSubFields[2].setText(u.getName());
+				textSubFields[3].setText(u.getTelNr());
+//				textSubFields[4].setText("0");		//kan vara bra att det står så från början
+				textSubFields[5].setText(String.valueOf(u
+						.getBikesInGarage()));
+
+				SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
+
+				editSubFrame = new JFrame("SpringForm");
+				editSubFrame.setLayout(new BorderLayout());
+				editSubFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+				p.setOpaque(true);
+				editSubFrame.add(p, BorderLayout.CENTER);
+
+				JPanel buttons = new JPanel();
+				buttons.setLayout(new BorderLayout());
+
+				JButton cancel = new JButton("Avbryt");
+				cancel.addActionListener(new Cancel());
+
+				JButton apply = new JButton("Verkställ");
+				apply.addActionListener(new SubApply());
+
+				JButton generate = new JButton("Generera");
+				generate.addActionListener(new Generate());
+
+				buttons.add(cancel, BorderLayout.LINE_START);
+				buttons.add(apply, BorderLayout.LINE_END);
+				buttons.add(generate, BorderLayout.SOUTH);
+
+				editSubFrame.add(buttons, BorderLayout.SOUTH);
+				editSubFrame.pack();
+				editSubFrame.setVisible(true);
 			}
 
 		}
