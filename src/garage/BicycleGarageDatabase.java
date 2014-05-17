@@ -183,7 +183,7 @@ public class BicycleGarageDatabase {
 		pinMap.get(newPin).add(u);
 		
 		//pinbyte för BarcodeMap
-		u = barcodeMap.get(barcode);	//inte säker om detta behövs?
+		//u = barcodeMap.get(barcode);	//inte säker om detta behövs? |I: nä, det behövs inte.
 		u.setPin(newPin);
 	}
 	
