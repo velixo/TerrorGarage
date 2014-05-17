@@ -167,6 +167,10 @@ public class BicycleGarageDatabase {
 			pinMap.put(newPin, new LinkedList<User>());
 		}
 		pinMap.get(newPin).add(u);
+		
+		//pinbyte för BarcodeMap
+		u = barcodeMap.get(barcode);	//inte säker om detta behövs?
+		u.setPin(newPin);
 	}
 	
 	public void removeUser(String barcode){

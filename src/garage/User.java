@@ -68,6 +68,11 @@ public class User{
 //	}
 	
 	//OBS! ANVÄND ENDAST GENOM DATABASEN!
+	/** OBS! FÅR ENDAST ANVÄNDAS I/GENOM DATABASEN! Metod som ändrar en users pin
+	 * 
+	 * @param p
+	 * 		userns nya pin
+	 * */
 	public void setPin(String p){
 		pin = p;
 	}
