@@ -84,7 +84,9 @@ public class BicycleGarageDatabase {
 	}
 	
 	public void save(){
-		//TODO;
+		for(String bc : barcodeMap.keySet()){
+			save(bc);
+		}
 	}
 	
 	public void save(String barcode){
