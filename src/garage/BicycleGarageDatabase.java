@@ -13,6 +13,11 @@ public class BicycleGarageDatabase {
 	private HashMap<String,LinkedList<User>> pinMap;
 	private LinkedList<RetrievalOrder> orders;
 	
+	//Error ints for when incorrect addUser
+	public static final int PIN_LENGTH_ERROR = 1;
+	public static final int BARCODE_LENGTH_ERROR = 2;
+	public static final int NO_ADDUSER_ERROR = 3;
+	
 	private String savedir;
 	private int bikesInside;
 	private int capacity;
@@ -32,11 +37,15 @@ public class BicycleGarageDatabase {
 	}
 	
 	public boolean checkPinRegistered(String pin){
-		if(pinMap.containsKey(pin)){
-			return !pinMap.get(pin).isEmpty();
-		}
-		else{
+		if (pin.length() != 4) {
 			return false;
+		} else {
+			if(pinMap.containsKey(pin)){
+				return !pinMap.get(pin).isEmpty();
+			}
+			else{
+				return false;
+			}
 		}
 	}
 	
@@ -75,7 +84,6 @@ public class BicycleGarageDatabase {
 		}
 	}
 	return null;
-	//End of Vilhelms förslag
 		
 	}
 	
@@ -147,13 +155,19 @@ public class BicycleGarageDatabase {
 		savedir = dir;
 	}
 	
-	public void addUser(String pin, String barcode, String name, String telNr){
+	public int addUser(String pin, String barcode, String name, String telNr){
+		if (pin.length() != 4) {
+			return PIN_LENGTH_ERROR;
+		} else if (barcode.length() != 5) {
+			return BARCODE_LENGTH_ERROR;
+		}
 		User usr = new User(name, telNr, barcode, pin);
 		barcodeMap.put(barcode, usr);
 		if(!pinMap.containsKey(pin)){
 			pinMap.put(pin, new LinkedList<User>());
 		}
 		pinMap.get(pin).add(usr);
+		return NO_ADDUSER_ERROR;
 		
 	}
 	
@@ -187,5 +201,15 @@ public class BicycleGarageDatabase {
 		return bikesInside>=capacity;
 	}
 	
+	private class TimeoutTask implements Runnable {
+		
+		public TimeoutTask(String pin) {
+			
+		}
+		
+		public void run () {
+			try
+		}
+	}
 	
 }

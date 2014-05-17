@@ -286,7 +286,7 @@ public class Operator {
 					JOptionPane.showMessageDialog(null,
 							"PIN-koden är inte 4 siffror lång",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-				} else if (textFields[1].getText().length() != 4) {
+				} else if (textFields[1].getText().length() != 5) {
 					JOptionPane.showMessageDialog(null,
 							"Streckkoden är inte 5 siffror lång",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
@@ -589,6 +589,7 @@ public class Operator {
 
 				textSubFields[0].setText(u.getPin());
 				textSubFields[1].setText(u.getBarcode());
+				textSubFields[1].setEditable(false);
 				textSubFields[2].setText(u.getName());
 				textSubFields[3].setText(u.getTelNr());
 //				textSubFields[4].setText("0");		//kan vara bra att det står så från början
