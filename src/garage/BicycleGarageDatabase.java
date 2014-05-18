@@ -73,17 +73,15 @@ public class BicycleGarageDatabase {
 		return barcodeMap.get(barcode);
 	}
 	
-	public User getUserByPersonnumber(String personNr){
-		//Vilhelms förslag
-	Iterator<User> usersIterator = barcodeMap.values().iterator();
-	while (usersIterator.hasNext()) {
-		User u = usersIterator.next();
-		if (u.getPersonNr() == personNr) {
-			return getUserByBarcode(u.getBarcode());
+	public User getUserByPersonnumber(String personNr) {
+		Iterator<User> usersIterator = barcodeMap.values().iterator();
+		while (usersIterator.hasNext()) {
+			User u = usersIterator.next();
+			if (u.getPersonNr().equals(personNr)) {
+				return getUserByBarcode(u.getBarcode());
+			}
 		}
-	}
-	return null;
-		
+		return null;
 	}
 	
 	public LinkedList<User> getUsers(String pin){
