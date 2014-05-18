@@ -134,10 +134,7 @@ public class PinCharCollector {
 	 * är tom eller ej)
 	 */
 	public boolean isPinCharListEmpty() {
-		if (pinCharList.toString().isEmpty()) {
-			return true;
-		}
-		return false;
+		return pinCharList.toString().isEmpty();
 //		return (pinCharList.length() == 0);
 	}
 	
