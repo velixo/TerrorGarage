@@ -127,9 +127,10 @@ public class BicycleGarageDatabase {
 		File userdir = new File(savedir);
 		if(userdir.exists()){
 			System.out.println("save directory hittades!");
-			for(File f : userdir.listFiles()){
+			File[] files = userdir.listFiles();
+			for(File f : files){
 				try {
-					Scanner s = new Scanner(f);
+					Scanner s = new Scanner(new File(userdir + "/" + f.getName()));
 					
 					String bc = s.nextLine();
 					String n = s.nextLine();
