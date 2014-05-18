@@ -554,7 +554,7 @@ public class Operator {
 								"Streckkodsnumret existerar ej",
 								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 					} else {						
-						findUser(u);
+						setUpMainEditWindow(u);
 					}
 				} else if (!textFields[1].getText().isEmpty()) {
 					u = database.getUserByPersonnumber(textFields[1].getText());
@@ -563,7 +563,7 @@ public class Operator {
 								"Personnumret existerar ej",
 								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 					} else {						
-						findUser(u);
+						setUpMainEditWindow(u);
 					}
 				} else {
 					JOptionPane.showMessageDialog(null,
@@ -574,7 +574,7 @@ public class Operator {
 				
 			}
 			
-			private void findUser(User u) {
+			private void setUpMainEditWindow(User u) {
 				int numPairs = labels.length;
 
 				textSubFields = new JTextField[labels.length];
