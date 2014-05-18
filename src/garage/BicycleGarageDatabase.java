@@ -23,7 +23,6 @@ public class BicycleGarageDatabase {
 	private int capacity;
 	
 	public BicycleGarageDatabase(int cap){
-		//TODO;
 		barcodeMap = new HashMap<String, User>();
 		pinMap = new HashMap<String, LinkedList<User>>();
 		orders = new LinkedList<RetrievalOrder>();
