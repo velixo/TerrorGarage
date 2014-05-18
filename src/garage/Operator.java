@@ -211,7 +211,7 @@ public class Operator {
 		private JFrame addFrame;
 		private JTextField[] textFields;
 		private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
-				"Telefonnummer: ", "Antal Streckkodskopior: " };
+				"Telefonnummer: ", "Personnummer", "Antal Streckkodskopior: " };
 
 		public void actionPerformed(ActionEvent e) {
 			int numPairs = labels.length;
@@ -276,7 +276,8 @@ public class Operator {
 						|| textFields[1].getText().equals("")
 						|| textFields[2].getText().equals("")
 						|| textFields[3].getText().equals("")
-						|| textFields[4].getText().equals("")) {
+						|| textFields[4].getText().equals("")
+						|| textFields[5].getText().equals("")) {
 
 					JOptionPane.showMessageDialog(null,
 							"Var vänlig fyll i alla uppgifter",
@@ -285,7 +286,7 @@ public class Operator {
 				} else {
 					int addUserErrorFeedback = database.addUser(textFields[0].getText(),
 							textFields[1].getText(), textFields[2].getText(),
-							textFields[3].getText());
+							textFields[3].getText(), textFields[4].getText());
 					if (addUserErrorFeedback == database.PIN_LENGTH_ERROR) {
 						JOptionPane.showMessageDialog(null,
 								"PIN-koden är inte 4 siffror lång",
