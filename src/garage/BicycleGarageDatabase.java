@@ -109,6 +109,7 @@ public class BicycleGarageDatabase {
 					u.getName() + "\n" + 
 					u.getTelNr() + "\n" + 
 					u.getPin() + "\n" + 
+					u.getPersonNr() + "\n" +
 					u.getBikesInGarage());
 			
 			//FELVARNING! KAN MÖJLIGTVIS STÄNGA STREAMEN PERMANENT SÅ ATT DET INTE GÅR ATT SKRIVA TILL FILEN IGEN FÖRENS PROGRAMMET STARTAS OM.
@@ -139,9 +140,10 @@ public class BicycleGarageDatabase {
 					String n = s.nextLine();
 					String tel = s.nextLine();
 					String pin = s.nextLine();
+					String pnr = s.nextLine();
 					int big = Integer.parseInt(s.nextLine());
 					
-					addUser(pin,bc,n,tel);
+					addUser(pin,bc,n,tel, pnr);
 					modifyBikesInGarage(bc, big);
 					
 					s.close();
