@@ -132,6 +132,26 @@ public class TestGarage {
 
 		assertEquals("Pin has not changed", newPin, currentPin);
 	}
+	
+	@Test
+	public void testIncorrectTerminalPinChange() {
+		String newPin = "9876";
+		String currentPin;
+		manager.entryCharacter('*');
+		manager.entryCharacter('1');
+		manager.entryCharacter('1');
+		manager.entryCharacter('1');
+		manager.entryCharacter('1');
+		for (int i = 0; i < 5; i++) {
+			manager.entryCharacter(barcode.charAt(i));
+		}
+		for (int i = 0; i < 4; i++) {
+			manager.entryCharacter(newPin.charAt(i));
+		}
+		currentPin = database.getUserByBarcode(barcode).getPin();
+
+		assertEquals("Pin has changed", pin, currentPin);
+	}
 
 	@Test
 	public void testprintBarcodes() {
