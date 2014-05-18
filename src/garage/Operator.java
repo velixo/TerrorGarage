@@ -134,7 +134,7 @@ public class Operator {
 		showAbout.getAccessibleContext().setAccessibleDescription("");
 		about.add(showAbout);
 
-		add = new JButton("Lägg till cykelägare");
+		add = new JButton("Lägg till ny cykelägare");
 		add.addActionListener(new AddUser());
 		edit = new JButton("Redigera cykelägare");
 		edit.addActionListener(new EditUser());
@@ -242,7 +242,7 @@ public class Operator {
 			JButton cancel = new JButton("Avbryt");
 			cancel.addActionListener(new Cancel());
 
-			JButton apply = new JButton("Verkställ");
+			JButton apply = new JButton("Lägg till användare och skriv ut streckkod(er)");
 			apply.addActionListener(new Apply());
 
 			JButton generate = new JButton("Generera");
@@ -611,7 +611,7 @@ public class Operator {
 				JButton cancel = new JButton("Avbryt");
 				cancel.addActionListener(new Cancel());
 
-				JButton apply = new JButton("Verkställ");
+				JButton apply = new JButton("Godkänn");
 				apply.addActionListener(new SubApply());
 
 				JButton generate = new JButton("Generera");
