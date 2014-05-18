@@ -74,12 +74,12 @@ public class BicycleGarageDatabase {
 		return barcodeMap.get(barcode);
 	}
 	
-	public User getUserByName(String name){
+	public User getUserByPersonnumber(String personNr){
 		//Vilhelms förslag
 	Iterator<User> usersIterator = barcodeMap.values().iterator();
 	while (usersIterator.hasNext()) {
 		User u = usersIterator.next();
-		if (u.getName() == name) {	//DETTA KOMMER GE ATT FÖRSTA USERN SOM HAR SAMMA NAMN RETURNERAS.
+		if (u.getPersonNr() == personNr) {
 			return getUserByBarcode(u.getBarcode());
 		}
 	}
@@ -159,13 +159,13 @@ public class BicycleGarageDatabase {
 		savedir = dir;
 	}
 	
-	public int addUser(String pin, String barcode, String name, String telNr){
+	public int addUser(String pin, String barcode, String name, String telNr, String personNr){
 		if (pin.length() != 4) {
 			return PIN_LENGTH_ERROR;
 		} else if (barcode.length() != 5) {
 			return BARCODE_LENGTH_ERROR;
 		}
-		User usr = new User(name, telNr, barcode, pin);
+		User usr = new User(name, telNr, barcode, pin, personNr);
 		barcodeMap.put(barcode, usr);
 		if(!pinMap.containsKey(pin)){
 			pinMap.put(pin, new LinkedList<User>());

@@ -486,7 +486,7 @@ public class Operator {
 
 		private JFrame editFrame;
 		private JTextField[] textFields;
-		private String[] labels = { "Cykelägarens streckkodsnummer: ", "Namn: " };
+		private String[] labels = { "Cykelägarens streckkodsnummer: ", "Personnummer: " };
 		private User u;
 		private JTextField[] textSubFields;
 		private JFrame editSubFrame;
@@ -541,7 +541,7 @@ public class Operator {
 		class Apply implements ActionListener {
 
 			private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
-					"Telefonnummer: ", "Antal Streckkodskopior: ",
+					"Telefonnummer: ", "Personnummer", "Antal Streckkodskopior: ",
 					"Antal cyklar i garaget: " };
 
 			public void actionPerformed(ActionEvent e) {
@@ -556,10 +556,10 @@ public class Operator {
 						findUser(u);
 					}
 				} else if (!textFields[1].getText().isEmpty()) {
-					u = database.getUserByName(textFields[1].getText());
+					u = database.getUserByPersonnumber(textFields[1].getText());
 					if (u == null) {
 						JOptionPane.showMessageDialog(null,
-								"Namnet existerar ej",
+								"Personnumret existerar ej",
 								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 					} else {						
 						findUser(u);
@@ -593,7 +593,8 @@ public class Operator {
 				textSubFields[2].setText(u.getName());
 				textSubFields[3].setText(u.getTelNr());
 //				textSubFields[4].setText("0");		//kan vara bra att det står så från början
-				textSubFields[5].setText(String.valueOf(u
+				textSubFields[5].setText(u.getPersonNr());
+				textSubFields[6].setText(String.valueOf(u
 						.getBikesInGarage()));
 
 				SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
@@ -665,7 +666,7 @@ public class Operator {
 				database.removeUser(u.getBarcode());
 				database.addUser(textSubFields[0].getText(),
 						textSubFields[1].getText(), textSubFields[2].getText(),
-						textSubFields[3].getText());
+						textSubFields[3].getText(), textSubFields[4].getText());
 //				database.modifyBikesInGarage();
 
 				StringBuilder sb = new StringBuilder();
@@ -675,6 +676,7 @@ public class Operator {
 						+ "\nNamn: " + u.getName() + " -> "
 						+ textSubFields[2].getText() + "\nTelNr: "
 						+ u.getTelNr() + " -> " + textSubFields[3].getText()
+						+ "\nPersonNr: " + u.getPersonNr()
 						+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
 						+ " -> " + textSubFields[5].getText());
 				mainTextField.setText("");
