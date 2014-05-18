@@ -89,15 +89,16 @@ public class BicycleGarageManager {
 		charCollecter.add(c);
 	}
 
-	/**
-	 * Registrerar databasen som skall användas.
-	 * 
-	 * @param database
-	 *			databasen som ska registreras
-	 */
-	public void registerDatabase(BicycleGarageDatabase database) {
-		this.database = database;
-	}
+//				Kom på att denna aldrig används då man alltid behöver en database i konstruktorn på managern
+//	/**
+//	 * Registrerar databasen som skall användas.
+//	 * 
+//	 * @param database
+//	 *			databasen som ska registreras
+//	 */
+//	public void registerDatabase(BicycleGarageDatabase database) {
+//		this.database = database;
+//	}
 	
 	/** 
 	 * Skriver ut streckkoden barcode.

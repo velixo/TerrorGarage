@@ -307,8 +307,8 @@ public class Operator {
 
 						mainTextField.setText(sb.toString());
 						
-						if (textFields[4].getText() != "" || textFields[4].getText() != " ") {
-							int barcodeCopies = Integer.valueOf(textFields[4].getText());
+						if (!textFields[5].getText().isEmpty() && !textFields[5].getText().contains("")) {
+							int barcodeCopies = Integer.valueOf(textFields[5].getText());
 							String barcode = textFields[1].getText();
 							print(barcode, barcodeCopies);						
 						}
@@ -440,8 +440,12 @@ public class Operator {
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
 				} else if (textFields[1].getText().equals(
-						database.getUserByBarcode(textFields[0].getText()).
-						getPin())) {
+						database.getUserByBarcode(
+								textFields[0].getText()
+												 ).getPin()
+														 )
+						  ) 
+				{
 					JOptionPane.showMessageDialog(null,
 							"Den inmatade PIN-koden matcher inte PIN-koden som  är associerad med den inmatade streckkoden",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);

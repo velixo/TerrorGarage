@@ -15,8 +15,9 @@ public class PinCharCollector {
 	private final int BLINKING_TRIPLE = 3;
 	private BlinkingTask task;
 	private Thread blinkThread;
-	private boolean blinkingStarted = false;
+	private boolean blinkingStarted;
 	private long timeLastCharClick;
+	private boolean firstTimeStarted;
 	
 	/**
 	* Konstruktorn för en PinCharCollector.
@@ -28,7 +29,8 @@ public class PinCharCollector {
 		pinCharList = new StringBuilder();
 		task = new BlinkingTask();
 		task.setBlinkMode(BLINKING_OFF);
-		timeLastCharClick = System.currentTimeMillis();
+		blinkingStarted = false;
+		firstTimeStarted = true;
 	}
 
 	/**
@@ -42,7 +44,10 @@ public class PinCharCollector {
 	*            tecknet som läggs till
 	*/
 	public void add(char c) {
-		if (System.currentTimeMillis() > timeLastCharClick + 10 * 1000) {
+		if (firstTimeStarted) {
+			firstTimeStarted = false;
+			timeLastCharClick = System.currentTimeMillis();
+		} else if (System.currentTimeMillis() > timeLastCharClick + 10 * 1000) {
 			clear();
 		}
 		timeLastCharClick = System.currentTimeMillis();
@@ -122,6 +127,18 @@ public class PinCharCollector {
 	private void clear() {
 		int length = pinCharList.length();
 		pinCharList.delete(0, length);
+	}
+	
+	/** METOD SOM ENDAST ANVÄNDS I JUNIT-TESTEN
+	 * Returnar om pin-terminalen har några inmatningar sparade eller inte (om listan med inmatningar/chars
+	 * är tom eller ej)
+	 */
+	public boolean isPinCharListEmpty() {
+		if (pinCharList.toString().isEmpty()) {
+			return true;
+		}
+		return false;
+//		return (pinCharList.length() == 0);
 	}
 	
 	private class BlinkingTask implements Runnable {

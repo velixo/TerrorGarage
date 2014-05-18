@@ -84,10 +84,6 @@ public class BicycleGarageDatabase {
 		return null;
 	}
 	
-	public LinkedList<User> getUsers(String pin){
-		return pinMap.get(pin);
-	}
-	
 	public void save(){
 		for(String bc : barcodeMap.keySet()){
 			save(bc);
