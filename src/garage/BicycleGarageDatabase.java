@@ -54,7 +54,7 @@ public class BicycleGarageDatabase {
 		String thePin = barcodeMap.get(barcode).getPin();
 		for(RetrievalOrder o : orders){
 			//Testers: watch out for NoSuchElement.
-			if(o.getExpMillis()>System.currentTimeMillis()){
+			if(o.getExpMillis()<System.currentTimeMillis()){
 				orders.remove(o);
 			}
 			else if(o.getPin().equals(thePin)){
@@ -65,9 +65,8 @@ public class BicycleGarageDatabase {
 		return false;
 	}
 	
-	public boolean setBikesRetrievable(String pin){
+	public void setBikesRetrievable(String pin){
 		orders.add(new RetrievalOrder(pin));
-		return false;
 	}
 	
 	public User getUserByBarcode(String barcode){
@@ -130,6 +129,10 @@ public class BicycleGarageDatabase {
 			File[] files = userdir.listFiles();
 			for(File f : files){
 				try {
+					if(f.getName().charAt(0)=='.'){
+						continue;
+					}
+					
 					Scanner s = new Scanner(new File(userdir + "/" + f.getName()));
 					
 					String bc = s.nextLine();
