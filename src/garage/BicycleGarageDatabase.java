@@ -51,17 +51,28 @@ public class BicycleGarageDatabase {
 	public boolean checkBikeRetrievable(String barcode){
 		
 		String thePin = barcodeMap.get(barcode).getPin();
+		RetrievalOrder oldest = null;
 		for(RetrievalOrder o : orders){
 			//Testers: watch out for NoSuchElement.
 			if(o.getExpMillis()<System.currentTimeMillis()){
 				orders.remove(o);
 			}
 			else if(o.getPin().equals(thePin)){
-				orders.remove(o);
-				return true;
+				if(oldest==null){
+					oldest = o;
+				}
+				else if(o.getExpMillis()<oldest.getExpMillis()){
+					oldest = o;
+				}
 			}
 		}
-		return false;
+		if(oldest != null){
+			orders.remove(oldest);
+			return true;
+		}
+		else{
+			return false;			
+		}
 	}
 	
 	public void setBikesRetrievable(String pin){
