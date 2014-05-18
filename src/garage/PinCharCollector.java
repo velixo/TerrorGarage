@@ -16,6 +16,7 @@ public class PinCharCollector {
 	private BlinkingTask task;
 	private Thread blinkThread;
 	private boolean blinkingStarted = false;
+	private long timeLastCharClick;
 	
 	/**
 	* Konstruktorn för en PinCharCollector.
@@ -27,6 +28,7 @@ public class PinCharCollector {
 		pinCharList = new StringBuilder();
 		task = new BlinkingTask();
 		task.setBlinkMode(BLINKING_OFF);
+		timeLastCharClick = System.currentTimeMillis();
 	}
 
 	/**
@@ -40,6 +42,11 @@ public class PinCharCollector {
 	*            tecknet som läggs till
 	*/
 	public void add(char c) {
+		if (System.currentTimeMillis() > timeLastCharClick + 10 * 1000) {
+			clear();
+		}
+		timeLastCharClick = System.currentTimeMillis();
+		
 		pinCharList.append(c);
 		if (pinCharList.charAt(0) == '*') {
 			
