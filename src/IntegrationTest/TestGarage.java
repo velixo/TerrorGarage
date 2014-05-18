@@ -21,7 +21,7 @@ public class TestGarage {
 	private PinCharCollector pinChar;
 	private BarcodePrinter printer;
 	private User user;
-	private String namn, telNr, pin, barcode;
+	private String namn, telNr, pin, barcode, personNr;
 
 	@Before
 	public void make() {
@@ -29,6 +29,8 @@ public class TestGarage {
 		telNr = "0720457387";
 		pin = "1234";
 		barcode = "12345";
+		personNr = "9412345678";
+		
 		entryLock = new ElectronicLockTestDriver("Entry lock");
 		exitLock = new ElectronicLockTestDriver("Exit lock");
 		printer = new BarcodePrinterTestDriver();
@@ -37,7 +39,7 @@ public class TestGarage {
 		manager = new BicycleGarageManager(database);
 		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
 		pinChar = new PinCharCollector(database, terminal, entryLock);
-		database.addUser(pin, barcode, namn, telNr);
+		database.addUser(pin, barcode, namn, telNr, personNr);
 		user = database.getUserByBarcode(barcode);
 
 	}
@@ -230,7 +232,7 @@ public class TestGarage {
 
 	@Test
 	public void testSettingSamePinForTwoUsers() {
-		database.addUser(pin, "56789", "Vilhelm", "0701234567");
+		database.addUser(pin, "56789", "Vilhelm", "0701234567", "9498765432");
 		user = database.getUserByBarcode("56789");
 		assertEquals("Pins are not the same", pin, user.getPin() );
 	}
