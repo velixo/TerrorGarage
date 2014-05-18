@@ -129,6 +129,10 @@ public class BicycleGarageDatabase {
 			File[] files = userdir.listFiles();
 			for(File f : files){
 				try {
+					if(f.getName().charAt(0)=='.'){
+						continue;
+					}
+					
 					Scanner s = new Scanner(new File(userdir + "/" + f.getName()));
 					
 					String bc = s.nextLine();
