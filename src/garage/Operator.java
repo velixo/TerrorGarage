@@ -172,13 +172,6 @@ public class Operator {
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		frame.add(textPanel, BorderLayout.CENTER);
 		frame.pack();
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		task.run();
 	}
 
 	// KANSKE HA MED DETTA: FET EJ
@@ -976,18 +969,16 @@ public class Operator {
 		}
 
 		public void run() {
-
 			try {
-				Thread.sleep(saveFrequency * 100);
+				while(!Thread.currentThread().isInterrupted()){
+					Thread.sleep(saveFrequency * 1000);
+					database.save();
+					System.out.println("sparade");
+				}			
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				System.out.println("kom vi hit?");
 			}
-
-			database.save();
-			System.out.println("sparade");
-			// continue;
-
 		}
 
 		public void editSaveFrequency(long saveFrequency) {
