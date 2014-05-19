@@ -34,7 +34,7 @@ public class Operator {
 	private JTextArea mainTextField;
 	private JFrame frame;
 	private JButton add, edit, remove;
-	private JMenu settings, view, about;
+	private JMenu settings, about;
 	private JMenuBar menuBar;
 	private JMenuItem options, showAbout;
 	private AutosaveTask task;
@@ -566,7 +566,7 @@ public class Operator {
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
-				} else if (textFields[1].getText().equals(
+				} else if (!textFields[1].getText().equals(
 						database.getUserByBarcode(textFields[0].getText())
 								.getPin())) {
 					JOptionPane
