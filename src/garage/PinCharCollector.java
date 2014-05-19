@@ -59,8 +59,9 @@ public class PinCharCollector {
 			if (pinCharList.length() < 5) {
 				if (task.getBlinkMode() != BLINKING_SINGLE) {
 					// blinkingStarted = true;
-					blinkThread = new Thread(task);
+					task = new BlinkingTask();
 					task.setBlinkMode(BLINKING_SINGLE);
+					blinkThread = new Thread(task);
 					blinkThread.start();
 				}
 			}
@@ -68,8 +69,9 @@ public class PinCharCollector {
 			else if (pinCharList.length() >= 5 && pinCharList.length() < 10) {
 				if (task.getBlinkMode() != BLINKING_DOUBLE) {
 					blinkThread.interrupt();
-					blinkThread = new Thread(task);
+					task = new BlinkingTask();
 					task.setBlinkMode(BLINKING_DOUBLE);
+					blinkThread = new Thread(task);
 					blinkThread.start();
 				}
 			}
@@ -77,8 +79,9 @@ public class PinCharCollector {
 			else if (pinCharList.length() >= 10 && pinCharList.length() < 14) {
 				if (task.getBlinkMode() != BLINKING_TRIPLE) {
 					blinkThread.interrupt();
-					blinkThread = new Thread(task);
+					task = new BlinkingTask();
 					task.setBlinkMode(BLINKING_TRIPLE);
+					blinkThread = new Thread(task);
 					blinkThread.start();
 				}
 			}
@@ -174,14 +177,20 @@ public class PinCharCollector {
 								// PINCODETERMINAL OCH TESTDRIVER
 				if (blinkMode == BLINKING_SINGLE) {
 					while (!Thread.currentThread().isInterrupted()) {
-						// System.out.println("BLINKING SINGLE");
+						if (isPinCharListEmpty()) {
+							Thread.currentThread().interrupt();
+						}
+						System.out.println("BLINKING SINGLE");
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
 						Thread.sleep(wait * 1000);
 					}
 				} else if (blinkMode == BLINKING_DOUBLE) {
 					while (!Thread.currentThread().isInterrupted()) {
-						// System.out.println("BLINKING DOUBLE");
+						if (isPinCharListEmpty()) {
+							Thread.currentThread().interrupt();
+						}
+						System.out.println("BLINKING DOUBLE");
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
 						Thread.sleep(interval * 1000);
@@ -191,7 +200,10 @@ public class PinCharCollector {
 					}
 				} else if (blinkMode == BLINKING_TRIPLE) {
 					while (!Thread.currentThread().isInterrupted()) {
-						// System.out.println("BLINKING TRIPLE");
+						if (isPinCharListEmpty()) {
+							Thread.currentThread().interrupt();
+						}
+						System.out.println("BLINKING TRIPLE");
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
 						Thread.sleep(interval * 1000);
