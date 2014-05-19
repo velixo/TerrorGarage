@@ -58,6 +58,7 @@ public class Operator {
 
 		// Autosavingthreaden start
 		task = new AutosaveTask(4);
+		task.editSaveFrequency(4);
 
 		Thread autoSaveThread = new Thread(task);
 		autoSaveThread.start();
@@ -73,7 +74,7 @@ public class Operator {
 
 		frame = new JFrame();
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.setPreferredSize(new Dimension(500, 200));
 		frame.setMinimumSize(new Dimension(470, 200));
@@ -417,7 +418,7 @@ public class Operator {
 
 			addFrame = new JFrame("SpringForm");
 			addFrame.setLayout(new BorderLayout());
-			addFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+//			addFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 			p.setOpaque(true);
 			addFrame.add(p, BorderLayout.CENTER);
