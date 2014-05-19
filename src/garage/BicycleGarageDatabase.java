@@ -22,6 +22,12 @@ public class BicycleGarageDatabase {
 	private int bikesInside;
 	private int capacity;
 	
+	/**
+	 * Skapar en databas med information om alla cykelägare och PIN-koder.
+	 * 
+	 * @param capacity
+	 *            cykelgaragets kapacitet
+	 */
 	public BicycleGarageDatabase(int cap){
 		barcodeMap = new HashMap<String, User>();
 		pinMap = new HashMap<String, LinkedList<User>>();
@@ -31,10 +37,24 @@ public class BicycleGarageDatabase {
 		bikesInside = 0;
 	}
 	
+	/**
+	 * Kollar om PIN-koden är registrerad i databasen.
+	 * 
+	 * @param pin
+	 *            PIN-koden som ska kollas
+	 * @return true om PIN-koden är registrerad
+	 */
 	public boolean checkBarcodeRegistered(String barcode){
 		return barcodeMap.containsKey(barcode);
 	}
 	
+	/**
+	 * Kollar om PIN-koden är registrerad i databasen.
+	 * 
+	 * @param pin
+	 *            PIN-koden som ska kollas
+	 * @return true om PIN-koden är registrerad
+	 */
 	public boolean checkPinRegistered(String pin){
 		if (pin.length() != 4) {
 			return false;
@@ -48,6 +68,13 @@ public class BicycleGarageDatabase {
 		}
 	}
 	
+	/**
+	 * Kollar om cykelägarens cykel är hämtbar.
+	 * 
+	 * @param barcode
+	 *            cykelägarens streckkod
+	 * @return true om cykeln/cyklarna är hämtbar/hämtbara
+	 */
 	public boolean checkBikeRetrievable(String barcode){
 		
 		String thePin = barcodeMap.get(barcode).getPin();
@@ -75,14 +102,34 @@ public class BicycleGarageDatabase {
 		}
 	}
 	
+	/**
+	 * Sätter samtliga cyklar med denna PIN-koden som hämtbar.
+	 * 
+	 * @param pin
+	 *            cyklar med denna pin görs hämtbara
+	 */
 	public void setBikesRetrievable(String pin){
 		orders.add(new RetrievalOrder(pin));
 	}
 	
+	/**
+	 * Returnerar cykelägaren vars sträckkod matchar parametern ‘barcode’.
+	 * 
+	 * @param barcode
+	 *            cykelägarens sträckkod
+	 * @return cykelägaren vars sträckkod matchar ‘barcode’
+	 */
 	public User getUserByBarcode(String barcode){
 		return barcodeMap.get(barcode);
 	}
 	
+	/**
+	 * Returnerar cykelägaren vars persnonnummer matchar parametern personNr.
+	 * 
+	 * @param personNr
+	 *            cykelägarens personnummer
+	 * @return cykelägaren vars personnummer matchar personnummer
+	 */
 	public User getUserByPersonnumber(String personNr) {
 		Iterator<User> usersIterator = barcodeMap.values().iterator();
 		while (usersIterator.hasNext()) {
@@ -94,12 +141,21 @@ public class BicycleGarageDatabase {
 		return null;
 	}
 	
+	/**
+	 * Sparar all data till filen specifierad i setDirectory.
+	 */
 	public void save(){
 		for(String bc : barcodeMap.keySet()){
 			save(bc);
 		}
 	}
 	
+	/**
+	 * Sparar bara datan för usern med streckkoden barcode.
+	 * 
+	 * @param barcode
+	 *            streckkoden refererar till den usern som ska sparas
+	 */
 	public void save(String barcode){
 		File userdir = new File(savedir);
 		if(!userdir.exists()){
@@ -127,6 +183,9 @@ public class BicycleGarageDatabase {
 		
 	}
 	
+	/**
+	 * Laddar den sparade datan från filen specifierad i setDirectory.
+	 */
 	public void load(){
 		File userdir = new File(savedir);
 		if(userdir.exists()){
@@ -164,10 +223,31 @@ public class BicycleGarageDatabase {
 		}
 	}
 	
+	
+	/**
+	 * Specificerar var databasen sparas.
+	 * 
+	 * @param dir
+	 *            plats som filen sparas på (t.e.x "C:/Users/Database/save.txt")
+	 */
 	public void setDirectory(String dir){
 		savedir = dir;
 	}
 	
+	/**
+	 * Lägger till en ny cykelägare i databasen.
+	 * 
+	 * @param pin
+	 *            cykelägarens PIN-kod
+	 * @param barcode
+	 *            cykelägarens streckkod
+	 * @param name
+	 *            cykelägarens namn
+	 * @param telNr
+	 *            cykelägarens telefonnummer
+	 * @param personNr
+	 *           cykelägarens personnummer
+	 */
 	public int addUser(String pin, String barcode, String name, String telNr, String personNr){
 		if (pin.length() != 4) {
 			return PIN_LENGTH_ERROR;
@@ -184,37 +264,52 @@ public class BicycleGarageDatabase {
 		
 	}
 	
-	public void changeUserPin(String barcode, String newPin){
-		User u = barcodeMap.get(barcode);
-		String oldPin = u.getPin();
-		//remove from old pin list
-		pinMap.get(oldPin).remove(u);
-		//insert in new pin list
-		if(!pinMap.containsKey(newPin)){
-			pinMap.put(newPin, new LinkedList<User>());
-		}
-		pinMap.get(newPin).add(u);
-		
-		//pinbyte för BarcodeMap
-		//u = barcodeMap.get(barcode);	//inte säker om detta behövs? |I: nä, det behövs inte.
-		u.setPin(newPin);
-	}
-	
+	/**
+	 * Tar bort en cykelägare. Ifall cykelägaren har cyklar i garaget så kommer en
+	 * MessageBox upp där operatören kan välja att radera cykelägaren ändå.
+	 * 
+	 * @param barcode
+	 *            cykelägarens streckkod
+	 */
 	public void removeUser(String barcode){
 		User u = barcodeMap.get(barcode);
 		pinMap.get(u.getPin()).remove(u);
 		barcodeMap.remove(barcode);
 	}
 	
+	/**
+	 * Ändrar antalet cyklar som en cykelägare har ställt i garaget.
+	 * 
+	 * @param barcode
+	 *            cykelägarens streckkod
+	 *            
+	 * @param modifier
+	 *            antalet cyklar som ska läggas till/tas bort
+	 */
 	public void modifyBikesInGarage(String barcode, int modifier){
 		barcodeMap.get(barcode).modBikesInGarage(modifier);
 		bikesInside += modifier;
 	}
 	
+	/**
+	 * Kollar om cykelgaraget är fullt eller ej.
+	 * 
+	 * @return true om cykelgaraget är fullt
+	 */
 	public boolean isGarageFull(){
 		return bikesInside>=capacity;
 	}
 	
+	/**
+	 * Ändrar cykelgaragets kapacitet.
+	 * 
+	 * @param capacity
+	 * 		den nya kapaciteten
+	 * 
+	 * @return true om ändringen gick igenom
+	 * 
+	 * @return false om capacity än antalet cyklar i garaget just nu
+	 */
 	public boolean setCapacity(int newCapacity) {
 		if (newCapacity < bikesInside) {
 			return false;
