@@ -17,11 +17,11 @@ public class TestGarage {
 //	private PinCharCollector pinChar;
 	private BarcodePrinter printer;
 	private User user;
-	private String namn, telNr, pin, barcode, personNumber, dir;
+	private String name, telNr, pin, barcode, personNumber, dir;
 
 	@Before
 	public void make() {
-		namn = "Rasha";
+		name = "Rasha";
 		telNr = "0720457387";
 		pin = "1234";
 		barcode = "12345";
@@ -35,7 +35,7 @@ public class TestGarage {
 		manager = new BicycleGarageManager(database);
 //		pinChar = new PinCharCollector(database, terminal, entryLock);
 		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
-		database.addUser(pin, barcode, namn, telNr, personNumber);
+		database.addUser(pin, barcode, name, telNr, personNumber);
 		user = database.getUserByBarcode(barcode);
 		terminal.register(manager);
 
@@ -48,7 +48,7 @@ public class TestGarage {
 		assertEquals("User's PIN-code is not 1234", pin, user.getPin());
 		assertEquals("User's phonenumber is not 0720457387", telNr,
 				user.getTelNr());
-		assertEquals("User's name is not Rasha", namn, user.getName());
+		assertEquals("User's name is not Rasha", name, user.getName());
 		assertEquals("User's barcode is not 12345", barcode, user.getBarcode());
 		assertEquals("User's personnumber is not 951120-0001", personNumber,
 				user.getPersonNr());
@@ -107,7 +107,11 @@ public class TestGarage {
 		String newPin = "2345";
 		String currentPin;
 		if (database.checkPinRegistered(pin)) {
-			database.changeUserPin(barcode, newPin);
+			int bikesInGarage = database.getUserByBarcode(barcode).getBikesInGarage();
+			database.removeUser(barcode);
+			database.addUser(newPin, barcode, name, telNr, personNumber);
+			database.modifyBikesInGarage(barcode, bikesInGarage);
+//			database.changeUserPin(barcode, newPin);
 			currentPin = user.getPin();
 			assertEquals("Pin has not changed", newPin, currentPin);
 
@@ -178,7 +182,7 @@ public class TestGarage {
 	@Test
 	public void testInvalidBarcode() {
 		String invalidBarcode = "123456";
-		database.addUser(pin, invalidBarcode, namn, telNr, "560605-3456");
+		database.addUser(pin, invalidBarcode, name, telNr, "560605-3456");
 		user = database.getUserByPersonnumber("560605-3456");
 		assertFalse("Barcode is registered",
 				database.checkBarcodeRegistered(invalidBarcode));
@@ -194,7 +198,7 @@ public class TestGarage {
 	@Test
 	public void testInvalidPin() {
 		String invalidPin = "12345";
-		database.addUser(invalidPin, "34567", namn, telNr, "560605-3456");
+		database.addUser(invalidPin, "34567", name, telNr, "560605-3456");
 		user = database.getUserByBarcode("34567");
 		assertFalse("Pin is registered",
 				database.checkPinRegistered(invalidPin));
@@ -250,7 +254,7 @@ public class TestGarage {
 		try {
 			wait(11 * 1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			// Auto-generated catch block
 			e.printStackTrace();
 		}
 		// try {

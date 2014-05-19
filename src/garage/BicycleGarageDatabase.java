@@ -176,7 +176,7 @@ public class BicycleGarageDatabase {
 			fw.close();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -260,6 +260,7 @@ public class BicycleGarageDatabase {
 			pinMap.put(pin, new LinkedList<User>());
 		}
 		pinMap.get(pin).add(usr);
+		save(barcode);
 		return NO_ADDUSER_ERROR;
 		
 	}
@@ -275,6 +276,7 @@ public class BicycleGarageDatabase {
 		User u = barcodeMap.get(barcode);
 		pinMap.get(u.getPin()).remove(u);
 		barcodeMap.remove(barcode);
+		//TODO; FILEN SKA TAS BORT 
 	}
 	
 	/**
