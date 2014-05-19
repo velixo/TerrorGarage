@@ -39,12 +39,13 @@ public class BicycleGarageManager {
 	 * @param terminal
 	 *            hårdvarudrivrutinen för PIN-kodsterminalen
 	 */
-	public void registerHardwareDrivers(BarcodePrinter printer,ElectronicLock entryLock, ElectronicLock exitLock,PinCodeTerminal terminal) {
+	public void registerHardwareDrivers(BarcodePrinter printer,ElectronicLock entryLock, ElectronicLock exitLock,PinCodeTerminal terminal, PinCharCollector charCollecter) {
 		this.printer = printer;
 		this.entryLock = entryLock;
 		this.exitLock = exitLock;
 		this.terminal = terminal;
-		charCollecter = new PinCharCollector(database, this.terminal, this.entryLock);
+		this.charCollecter = charCollecter;
+//		charCollecter = new PinCharCollector(database, this.terminal, this.entryLock);
 
 	}
 

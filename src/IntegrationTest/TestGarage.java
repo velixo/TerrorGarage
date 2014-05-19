@@ -33,8 +33,8 @@ public class TestGarage {
 		terminal = new PinCodeTerminalTestDriver();
 		database = new BicycleGarageDatabase(300);
 		manager = new BicycleGarageManager(database);
-		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
 		pinChar = new PinCharCollector(database, terminal, entryLock);
+		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal, pinChar);
 		database.addUser(pin, barcode, namn, telNr, personNumber);
 		user = database.getUserByBarcode(barcode);
 		terminal.register(manager);
@@ -94,7 +94,7 @@ public class TestGarage {
 		database.save();
 		database = new BicycleGarageDatabase(300);
 		manager = new BicycleGarageManager(database);
-		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
+		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal, pinChar);
 		database.setDirectory(dir);
 		database.load();
 		assertEquals("User's barcode is not the same after database restart ",
