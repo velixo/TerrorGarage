@@ -681,6 +681,7 @@ public class Operator {
 	public static void main(String[] args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
 		BicycleGarageManager manager = new BicycleGarageManager(database);
+		database.load();
 		Operator main = new Operator(database, manager);
 		while (main.running()) {
 			try {
@@ -688,6 +689,7 @@ public class Operator {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			database.save();
 			continue;
 		}
 		System.exit(0);
