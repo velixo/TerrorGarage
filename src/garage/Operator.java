@@ -94,42 +94,6 @@ public class Operator {
 		options.addActionListener(new Setting());
 		settings.add(options);
 
-		// showBarcodeReaderEntry = new
-		// JCheckBoxMenuItem("Visa streckkodsläsare (ingång)");
-		// showBarcodeReaderEntry.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
-		// ActionEvent.CTRL_MASK));
-		// showBarcodeReaderEntry.getAccessibleContext().setAccessibleDescription("");
-		// // showBarcodeReaderEntry.addActionListener(new
-		// ShowBarcodeReaderEntry());
-		// view.add(showBarcodeReaderEntry);
-		//
-		// showBarcodeReaderExit = new
-		// JCheckBoxMenuItem("Visa streckkodsläsare (utgång)");
-		// showBarcodeReaderExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
-		// ActionEvent.CTRL_MASK));
-		// showBarcodeReaderExit.getAccessibleContext().setAccessibleDescription("");
-		// // showBarcodeReaderExit.addActionListener(new
-		// ShowBarcodeReaderExit());
-		// view.add(showBarcodeReaderExit);
-		//
-		// showBarcodeWrite = new JCheckBoxMenuItem("Visa streckkodsskrivare");
-		// showBarcodeWrite.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2,
-		// ActionEvent.CTRL_MASK));
-		// showBarcodeWrite.getAccessibleContext().setAccessibleDescription("");
-		// view.add(showBarcodeWrite);
-		//
-		// showPIN = new JCheckBoxMenuItem("Visa PIN-kodsterminal");
-		// showPIN.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3,
-		// ActionEvent.CTRL_MASK));
-		// showPIN.getAccessibleContext().setAccessibleDescription("");
-		// view.add(showPIN);
-		//
-		// showLock = new JCheckBoxMenuItem("Visa dörrlås");
-		// showLock.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4,
-		// ActionEvent.CTRL_MASK));
-		// showLock.getAccessibleContext().setAccessibleDescription("");
-		// view.add(showLock);
-
 		showAbout = new JMenuItem("Om", KeyEvent.VK_T);
 		showAbout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1,
 				ActionEvent.SHIFT_MASK));
@@ -169,41 +133,7 @@ public class Operator {
 		frame.pack();
 	}
 
-	// KANSKE HA MED DETTA: FET EJ
-	//
-	// class ShowBarcodeReaderEntry implements ActionListener {
-	//
-	//
-	//
-	// @Override
-	// public void actionPerformed(ActionEvent arg0) {
-	// brentry =! brentry;
-	// if (!brentry){
-	// entryReader = null;
-	// } else {
-	// entryReader = new BarcodeReaderEntryTestDriver();
-	// }
-	// }
-	//
-	// }
-	//
-	// class ShowBarcodeReaderExit implements ActionListener {
-	//
-	//
-	//
-	//
-	// @Override
-	// public void actionPerformed(ActionEvent arg0) {
-	// brexit =! brexit;
-	// if (!brexit){
-	// exitReader = null;
-	// } else {
-	// exitReader = new BarcodeReaderExitTestDriver();
-	// }
-	// }
-	//
-	// }
-	//
+
 	private class Setting implements ActionListener {
 		
 		private JFrame settingsFrame;
