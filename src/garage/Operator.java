@@ -38,10 +38,6 @@ public class Operator {
 	private JMenuBar menuBar;
 	private JMenuItem options, showBarcodeReaderEntry, showBarcodeReaderExit,
 			showBarcodeWrite, showPIN, showLock, showAbout;
-	private BarcodeReaderEntryTestDriver entryReader;
-	private BarcodeReaderExitTestDriver exitReader;
-	private boolean brexit = false;
-	private boolean brentry = false;
 
 	/**
 	 * Skapar ett GUI med alla knappar, fönster och dylikt som ska finnas med i
@@ -806,21 +802,21 @@ public class Operator {
 	// return null;
 	// }
 
-	public static void main(String[] args) {
-		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
-		BicycleGarageManager manager = new BicycleGarageManager(database);
-		database.load();
-		Operator main = new Operator(database, manager);
-		while (main.running()) {
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			database.save();
-		}
-		System.exit(0);
-	}
+//	public static void main(String[] args) {
+//		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
+//		BicycleGarageManager manager = new BicycleGarageManager(database);
+//		database.load();
+//		Operator main = new Operator(database, manager);
+//		while (main.running()) {
+//			try {
+//				Thread.sleep(4000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			database.save();
+//		}
+//		System.exit(0);
+//	}
 
 	private void print(String barcode, int barcodeCopies) {
 		if (barcodeCopies > 0) {
@@ -846,7 +842,7 @@ public class Operator {
 		public void run() {
 
 			try {
-				Thread.sleep(saveFrequency * 1000);
+				Thread.sleep(saveFrequency * 60 * 1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
