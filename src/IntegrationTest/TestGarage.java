@@ -100,7 +100,8 @@ public class TestGarage {
 		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
 		database.setDirectory(dir);
 		database.load();
-		assertTrue("User is not saved after restart", database.getUserByBarcode(barcode).equals(user));
+		User tempUser = database.getUserByBarcode(barcode);
+		assertTrue("User is not the same/saved", user.equals(tempUser));
 
 	}
 
@@ -115,8 +116,12 @@ public class TestGarage {
 			database.modifyBikesInGarage(barcode, bikesInGarage);
 			user = database.getUserByBarcode(barcode);
 			currentPin = user.getPin();
+			assertEquals("Name has changed", name, user.getName());
+			assertEquals("Barcode has changed", barcode, user.getBarcode());
+			assertEquals("Telnr has changed", telNr, user.getTelNr());
+			assertEquals("Personnumber has changed", personNumber, user.getPersonNr());
+			assertEquals("BikesInGarage has changed", bikesInGarage, user.getBikesInGarage());
 			assertEquals("Pin has not changed", newPin, currentPin);
-
 		}
 	}
 
@@ -213,37 +218,36 @@ public class TestGarage {
 
 	@Test
 	public void testEnterWithPin() {
-		// TODO;
-		if (database.checkPinRegistered(pin)) {
-			for (int i = 0; i < 4; i++) {
-				manager.entryCharacter(pin.charAt(i));
-			}
+		for (int i = 0; i < 4; i++) {			
+			manager.entryCharacter(pin.charAt(i));
 		}
-		if (database.checkBikeRetrievable(barcode)) {
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException iex) {
-
-			}
-
-		}
+		assertTrue("Bike is not retrievable", database.checkBikeRetrievable(barcode));
 	}
 
 	@Test
 	public void testEnterGarageAfterTimeout() {
-		// TODO;
-		if (database.checkPinRegistered(barcode)) {
-			for (int i = 0; i < 4; i++) {
-				manager.entryCharacter(pin.charAt(i));
-			}
+		manager.entryCharacter('1');
+		try {
+			Thread.sleep(11 * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+		assertTrue("PinCharList is not empty", manager.isPinCharListEmpty());
 	}
 
 	@Test
 	public void testExitGarageAfterTimeout() {
-		if (!database.checkBikeRetrievable(barcode)) {
-
-		}
+		//TODO;
+//		manager.entryBarcode(barcode);
+//		for (int i = 0; i < 4; i++) {
+//			manager.entryCharacter(pin.charAt(i));
+//		}
+//		try {
+//			Thread.sleep(31 * 60 * 1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		assertFalse("", database.checkBikeRetrievable(barcode));
 	}
 
 	@Test
@@ -261,7 +265,7 @@ public class TestGarage {
 //		}
 		
 		try {
-		Thread.sleep(11 * 1000);
+			Thread.sleep(11 * 1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -292,10 +296,8 @@ public class TestGarage {
 
 	@Test
 	public void testGetUserByPersonnumber() {
-		if (database.getUserByPersonnumber(personNumber) != null) {
-			assertEquals("", database.getUserByPersonnumber(personNumber)
+		assertEquals("", database.getUserByPersonnumber(personNumber)
 					.getPersonNr(), personNumber);
-		}
 	}
 
 	@Test
@@ -304,6 +306,31 @@ public class TestGarage {
 		manager.exitBarcode(barcode);
 		assertEquals("", 1, database.getUserByBarcode(barcode)
 				.getBikesInGarage());
+	}
+	
+	@Test
+	public void testSaveWithNonExistingDirectory() {
+		File f = new File(nonExistingDir);
+		if (f.exists()) {
+			File[] files = f.listFiles();
+			for (File fSub : files) {
+				fSub.delete();
+			}
+			f.delete();
+		}
+		
+		f = new File(nonExistingDir);
+		assertFalse("nonExistingDir exists", f.exists());
+		database.setDirectory(nonExistingDir);
+		database.save();
+		
+		database = new BicycleGarageDatabase(300);
+		manager = new BicycleGarageManager(database);
+		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
+		database.setDirectory(nonExistingDir);
+		database.load();
+		User tempUser = database.getUserByBarcode(barcode);
+		assertTrue("User is not the same/saved", user.equals(tempUser));
 	}
 
 }

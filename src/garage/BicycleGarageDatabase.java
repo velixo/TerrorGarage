@@ -155,6 +155,7 @@ public class BicycleGarageDatabase {
 		try {
 			FileWriter fw = new FileWriter(savedir + "/cap");
 			fw.write(capacity);
+			fw.close();
 			
 		}catch(IOException e){
 			System.out.println("ERROR: couldn't save garage capacity");
@@ -204,14 +205,16 @@ public class BicycleGarageDatabase {
 //			System.out.println("save directory hittades!");
 			
 			Scanner capScan = new Scanner(savedir + "/cap");
-			if(capScan.hasNextInt()){
+			if (capScan.hasNextInt()){
 				capacity = capScan.nextInt();				
 			}
 			capScan.close();
 			File[] files = userdir.listFiles();
-			for(File f : files){
+			for (File f : files){
 				try {
-					if(f.getName().charAt(0)=='.'){
+					if (f.getName().charAt(0)=='.'){		//Buggfix för Mac-datorer
+						continue;
+					} else if (f.getName().equals("cap")){
 						continue;
 					}
 					

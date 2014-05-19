@@ -70,27 +70,6 @@ public class User{
 		return bikesInGarage;
 	}
 	
-
-	/** OBS! FÅR ENDAST ANVÄNDAS I/GENOM DATABASEN!
-	 * Metod som ändrar en users pin
-	 * 
-	 * @param p
-	 * 		userns nya pin
-	 * */
-	public void setPin(String p){
-		pin = p;
-	}
-	
-	/**
-	 * Tilldelar usern ett nytt namn.
-	 * 
-	 * @param n
-	 * 	userns nya namn
-	 */
-	public void setName(String n){
-		name = n;
-	}
-	
 	/**
 	 * OBS! FÅR ENDAST ANVÄNDAS I/GENOM DATABASEN! Metod som 
 	 * ändrar en users antal cyklar i garaget
@@ -100,5 +79,30 @@ public class User{
 	 */
 	public void modBikesInGarage(int m){
 		bikesInGarage+=m;
+	}
+	
+	/** 
+	 * Skuggning av metoden equals
+	 * 
+	 * @param u
+	 * 		usern som detta objekt ska jämföras med
+	 * 
+	 * @return true om de har identiska attribut
+	 * 
+	 * @return false om de inte har det
+	 * 
+	 * */
+	public boolean equals(User u) {
+		if(
+			this.name.equals(u.getName()) &&
+			this.barcode.equals(u.getBarcode()) &&
+			this.telNr.equals(u.getTelNr()) &&
+			this.bikesInGarage == u.getBikesInGarage() &&
+			this.pin.equals(u.getPin()) &&
+			this.personNr.equals(u.getPersonNr())
+		) {
+			return true;
+		}
+		return false;
 	}
 }
