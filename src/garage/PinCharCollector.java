@@ -92,7 +92,17 @@ public class PinCharCollector {
 				User u = database.getUserByBarcode(barcode);
 				
 				if (u.getPin().equals(oldPin)) {
-					database.changeUserPin(barcode, newPin);
+					
+					String name = u.getName();
+					String telNr = u.getTelNr();
+					String personNr = u.getPersonNr();
+					int bikesInGarage = u.getBikesInGarage();
+					database.removeUser(barcode);
+					database.addUser(newPin, barcode, name, telNr, personNr);
+					database.modifyBikesInGarage(barcode, bikesInGarage);
+					
+					//database.changeUserPin(barcode, newPin);
+					
 					database.setBikesRetrievable(newPin);
 					entryLock.open(10);
 					terminal.lightLED(terminal.GREEN_LED, 3);
