@@ -277,7 +277,13 @@ public class BicycleGarageDatabase {
 		User u = barcodeMap.get(barcode);
 		pinMap.get(u.getPin()).remove(u);
 		barcodeMap.remove(barcode);
-		//TODO; FILEN SKA TAS BORT 
+		//TODO; FILEN SKA TAS BORT
+		
+		File f = new File(savedir + "/" + barcode);
+		if(f.exists()){
+			f.delete();				
+		}
+		
 	}
 	
 	/**
