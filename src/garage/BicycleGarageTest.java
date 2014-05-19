@@ -4,6 +4,10 @@ import drivers.*;
 import testDrivers.*;
 
 public class BicycleGarageTest {
+	
+	/**
+	 *Används för att starta igång hela systemet.
+	 */
 	public static void main(String[]args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase(100);
 		BicycleGarageManager manager = new BicycleGarageManager(database);
@@ -21,10 +25,10 @@ public class BicycleGarageTest {
         readerEntry.register(manager);
         readerExit.register(manager);
         
-        while(true) {
-        	if (!op.running()) {
-				System.exit(0);
-			}
-        }
+//        while(true) {
+//        	if (!op.running()) {
+//				System.exit(0);
+//			}
+//        }
 	}
 }

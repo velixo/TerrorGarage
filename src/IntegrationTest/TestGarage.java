@@ -17,7 +17,7 @@ public class TestGarage {
 //	private PinCharCollector pinChar;
 	private BarcodePrinter printer;
 	private User user;
-	private String name, telNr, pin, barcode, personNumber, dir;
+	private String name, telNr, pin, barcode, personNumber, dir, nonExistingDir;
 
 	@Before
 	public void make() {
@@ -27,6 +27,7 @@ public class TestGarage {
 		barcode = "12345";
 		personNumber = "951120-0001";
 		dir = "/Users/rashaelmanzalawy/Desktop/Hej";
+		nonExistingDir = "";
 		entryLock = new ElectronicLockTestDriver("Entry lock");
 		exitLock = new ElectronicLockTestDriver("Exit lock");
 		printer = new BarcodePrinterTestDriver();

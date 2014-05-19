@@ -71,13 +71,8 @@ public class User{
 	}
 	
 
-//	@Override
-//	public int compareTo(String otherbc) {
-//		return barcode.compareTo(otherbc);
-//	}
-	
-	//OBS! ANVÄND ENDAST GENOM DATABASEN!
-	/** OBS! FÅR ENDAST ANVÄNDAS I/GENOM DATABASEN! Metod som ändrar en users pin
+	/** OBS! FÅR ENDAST ANVÄNDAS I/GENOM DATABASEN!
+	 * Metod som ändrar en users pin
 	 * 
 	 * @param p
 	 * 		userns nya pin
@@ -96,6 +91,13 @@ public class User{
 		name = n;
 	}
 	
+	/**
+	 * OBS! FÅR ENDAST ANVÄNDAS I/GENOM DATABASEN! Metod som 
+	 * ändrar en users antal cyklar i garaget
+	 *
+	 * @param m
+	 * 	mängden cyklar som läggs/tas bort hos 
+	 */
 	public void modBikesInGarage(int m){
 		bikesInGarage+=m;
 	}
