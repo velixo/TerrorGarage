@@ -190,7 +190,7 @@ public class BicycleGarageDatabase {
 	public void load(){
 		File userdir = new File(savedir);
 		if(userdir.exists()){
-			System.out.println("save directory hittades!");
+//			System.out.println("save directory hittades!");
 			File[] files = userdir.listFiles();
 			for(File f : files){
 				try {
@@ -281,7 +281,6 @@ public class BicycleGarageDatabase {
 		User u = barcodeMap.get(barcode);
 		pinMap.get(u.getPin()).remove(u);
 		barcodeMap.remove(barcode);
-		//TODO; FILEN SKA TAS BORT
 		
 		File f = new File(savedir + "/" + barcode);
 		if(f.exists()){
