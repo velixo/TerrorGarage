@@ -11,7 +11,7 @@ public class BicycleGarageTest {
 	public static void main(String[]args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase(100);
 		BicycleGarageManager manager = new BicycleGarageManager(database);
-		Operator op = new Operator(database, manager);
+		new Operator(database, manager);
 		
         ElectronicLock entryLock = new ElectronicLockTestDriver("Entry lock");
         ElectronicLock exitLock = new ElectronicLockTestDriver("Exit lock");
@@ -24,26 +24,5 @@ public class BicycleGarageTest {
         BarcodeReader readerExit = new BarcodeReaderExitTestDriver();
         readerEntry.register(manager);
         readerExit.register(manager);
-        
-<<<<<<< HEAD
-        while(true) {
-        	if (!op.running()) {
-        		entryLock = null;
-        		exitLock = null;
-        		printer = null;
-        		terminal = null;
-        		readerEntry = null;
-        		readerExit = null;
-        		
-				System.exit(0);
-			}
-        }
-=======
-//        while(true) {
-//        	if (!op.running()) {
-//				System.exit(0);
-//			}
-//        }
->>>>>>> daa84e46c1c76bc77d86cb5f5f1a068bbc469e14
 	}
 }
