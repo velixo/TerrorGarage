@@ -16,7 +16,7 @@ public class PinCharCollector {
 	private BlinkingTask task;
 	private Thread blinkThread;
 	private boolean blinkingStarted;
-	private long timeLastCharClick;
+	private long timeSinceLastCharClick;
 	private boolean firstTimeStarted;
 	
 	/**
@@ -46,11 +46,11 @@ public class PinCharCollector {
 	public void add(char c) {
 		if (firstTimeStarted) {
 			firstTimeStarted = false;
-			timeLastCharClick = System.currentTimeMillis();
-		} else if (System.currentTimeMillis() > timeLastCharClick + 10 * 1000) {
+			timeSinceLastCharClick = System.currentTimeMillis();
+		} else if (System.currentTimeMillis() > timeSinceLastCharClick + 10 * 1000) {
 			clear();
 		}
-		timeLastCharClick = System.currentTimeMillis();
+		timeSinceLastCharClick = System.currentTimeMillis();
 		
 		pinCharList.append(c);
 		if (pinCharList.charAt(0) == '*') {
@@ -134,6 +134,9 @@ public class PinCharCollector {
 	 * är tom eller ej)
 	 */
 	public boolean isPinCharListEmpty() {
+		if (System.currentTimeMillis() > timeSinceLastCharClick + 10 * 1000) {
+			clear();
+		}
 		return pinCharList.toString().isEmpty();
 //		return (pinCharList.length() == 0);
 	}
@@ -151,13 +154,13 @@ public class PinCharCollector {
 				long wait = 4;		//SKA EGENTLIGEN VARA 1.5 SEKUNDER. SÄTTS TILL 3 I VÄNTAN PÅ KONFIRMATION ATT ÄNDRA PINCODETERMINAL OCH TESTDRIVER
 				if (blinkMode == BLINKING_SINGLE) {
 					while (!Thread.currentThread().isInterrupted()){
-						System.out.println("BLINKING SINGLE");
+//						System.out.println("BLINKING SINGLE");
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
 						Thread.sleep(wait * 1000);
 					}
 				} else if (blinkMode == BLINKING_DOUBLE) {
 					while (!Thread.currentThread().isInterrupted()){
-						System.out.println("BLINKING DOUBLE");
+//						System.out.println("BLINKING DOUBLE");
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
 						Thread.sleep(interval * 1000);
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
@@ -165,7 +168,7 @@ public class PinCharCollector {
 					}
 				} else if (blinkMode == BLINKING_TRIPLE) {
 					while (!Thread.currentThread().isInterrupted()){
-						System.out.println("BLINKING TRIPLE");
+//						System.out.println("BLINKING TRIPLE");
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
 						Thread.sleep(interval * 1000);
 						terminal.lightLED(terminal.GREEN_LED, (int)interval);
