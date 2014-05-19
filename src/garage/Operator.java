@@ -204,7 +204,7 @@ public class Operator {
 	//
 	// }
 	//
-	class Setting implements ActionListener {
+	private class Setting implements ActionListener {
 		
 		private JFrame settingsFrame;
 		private String[] labels = {"Sparfrekvens (min): ", "Kapacitet (antal cyklar): ", "Sökväg för inläsning/sparning: "};
@@ -257,14 +257,14 @@ public class Operator {
 			
 		}
 		
-		class Cancel implements ActionListener {
+		private class Cancel implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				settingsFrame.setVisible(false);
 			}
 		}
 		
-		class Apply implements ActionListener {
+		private class Apply implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				mainTextField.setText("");
@@ -299,7 +299,7 @@ public class Operator {
 		
 	}
 	
-	class ShowAbout implements ActionListener {
+	private class ShowAbout implements ActionListener {
 
 		private JFrame aboutFrame;
 		private String labels = 
@@ -331,7 +331,7 @@ public class Operator {
 
 	}
 
-	class AddUser implements ActionListener {
+	private class AddUser implements ActionListener {
 
 		private JFrame addFrame;
 		private JTextField[] textFields;
@@ -382,14 +382,14 @@ public class Operator {
 			addFrame.setVisible(true);
 		}
 
-		class Cancel implements ActionListener {
+		private class Cancel implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				addFrame.setVisible(false);
 			}
 		}
 
-		class Apply implements ActionListener {
+		private class Apply implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				mainTextField.setText("");
@@ -447,7 +447,7 @@ public class Operator {
 			}
 		}
 
-		class Generate implements ActionListener {
+		private class Generate implements ActionListener {
 
 			private Random rand = new Random();
 			private String newPin;
@@ -500,7 +500,7 @@ public class Operator {
 		}
 	}
 
-	class RemoveUser implements ActionListener {
+	private class RemoveUser implements ActionListener {
 		private JFrame removeFrame;
 		private JTextField[] textFields;
 		private String[] labels = { "Cykelägarens streckkodsnummer: ", "PIN: " };
@@ -544,14 +544,14 @@ public class Operator {
 			removeFrame.setVisible(true);
 		}
 
-		class Cancel implements ActionListener {
+		private class Cancel implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				removeFrame.setVisible(false);
 			}
 		}
 
-		class Apply implements ActionListener {
+		private class Apply implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				mainTextField.setText("");
@@ -612,7 +612,7 @@ public class Operator {
 		}
 	}
 
-	class EditUser implements ActionListener {
+	private class EditUser implements ActionListener {
 
 		private JFrame editFrame;
 		private JTextField[] textFields;
@@ -661,14 +661,14 @@ public class Operator {
 			editFrame.setVisible(true);
 		}
 
-		class Cancel implements ActionListener {
+		private class Cancel implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				editFrame.setVisible(false);
 			}
 		}
 
-		class Apply implements ActionListener {
+		private class Apply implements ActionListener {
 
 			private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
 					"Telefonnummer: ", "Personnummer",
@@ -758,7 +758,7 @@ public class Operator {
 
 		}
 
-		class Generate implements ActionListener {
+		private class Generate implements ActionListener {
 
 			private Random rand = new Random();
 			private String newPin;
@@ -788,7 +788,7 @@ public class Operator {
 			}
 		}
 
-		class SubApply implements ActionListener {
+		private class SubApply implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {
 
@@ -826,7 +826,7 @@ public class Operator {
 
 		}
 
-		class SubCancel implements ActionListener {
+		private class SubCancel implements ActionListener {
 
 			public void actionPerformed(ActionEvent arg0) {
 				editSubFrame.setVisible(false);
