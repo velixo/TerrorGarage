@@ -214,4 +214,12 @@ public class BicycleGarageDatabase {
 	public boolean isGarageFull(){
 		return bikesInside>=capacity;
 	}
+	
+	public boolean setCapacity(int newCapacity) {
+		if (newCapacity < bikesInside) {
+			return false;
+		}
+		capacity = newCapacity;
+		return true;
+	}
 }
