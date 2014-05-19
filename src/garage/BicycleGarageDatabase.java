@@ -148,6 +148,17 @@ public class BicycleGarageDatabase {
 		for(String bc : barcodeMap.keySet()){
 			save(bc);
 		}
+		File dir = new File(savedir);
+		if(!dir.exists()){
+			dir.mkdir();
+		}
+		try {
+			FileWriter fw = new FileWriter(savedir + "/cap");
+			fw.write(capacity);
+			
+		}catch(IOException e){
+			System.out.println("ERROR: couldn't save garage capacity");
+		}
 	}
 	
 	/**
@@ -191,6 +202,12 @@ public class BicycleGarageDatabase {
 		File userdir = new File(savedir);
 		if(userdir.exists()){
 //			System.out.println("save directory hittades!");
+			
+			Scanner capScan = new Scanner(savedir + "/cap");
+			if(capScan.hasNextInt()){
+				capacity = capScan.nextInt();				
+			}
+			capScan.close();
 			File[] files = userdir.listFiles();
 			for(File f : files){
 				try {
