@@ -775,12 +775,12 @@ public class Operator {
 	// return null;
 	// }
 
-	public boolean running() {
-		if (frame.isVisible()) {
-			return true;
-		}
-		return false;
-	}
+//	public boolean running() {
+//		if (frame.isVisible()) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Söker efter streckkoden för en viss cykelägare.
