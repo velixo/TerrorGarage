@@ -23,8 +23,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SpringLayout;
 
 import springUtilities.SpringUtilities;
-import testDrivers.BarcodeReaderEntryTestDriver;
-import testDrivers.BarcodeReaderExitTestDriver;
 
 public class Operator {
 
