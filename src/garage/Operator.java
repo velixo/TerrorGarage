@@ -779,12 +779,12 @@ public class Operator {
 	// return null;
 	// }
 
-	public boolean running() {
-		if (frame.isVisible()) {
-			return true;
-		}
-		return false;
-	}
+//	public boolean running() {
+//		if (frame.isVisible()) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Söker efter streckkoden för en viss cykelägare.
@@ -806,21 +806,21 @@ public class Operator {
 	// return null;
 	// }
 
-	public static void main(String[] args) {
-		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
-		BicycleGarageManager manager = new BicycleGarageManager(database);
-		database.load();
-		Operator main = new Operator(database, manager);
-		while (main.running()) {
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			database.save();
-		}
-		System.exit(0);
-	}
+//	public static void main(String[] args) {
+//		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
+//		BicycleGarageManager manager = new BicycleGarageManager(database);
+//		database.load();
+//		Operator main = new Operator(database, manager);
+//		while (main.running()) {
+//			try {
+//				Thread.sleep(4000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			database.save();
+//		}
+//		System.exit(0);
+//	}
 
 	private void print(String barcode, int barcodeCopies) {
 		if (barcodeCopies > 0) {
