@@ -180,7 +180,7 @@ public class PinCharCollector {
 						if (isPinCharListEmpty()) {
 							Thread.currentThread().interrupt();
 						}
-						System.out.println("BLINKING SINGLE");
+//						System.out.println("BLINKING SINGLE");
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
 						Thread.sleep(wait * 1000);
@@ -190,12 +190,14 @@ public class PinCharCollector {
 						if (isPinCharListEmpty()) {
 							Thread.currentThread().interrupt();
 						}
-						System.out.println("BLINKING DOUBLE");
+//						System.out.println("BLINKING DOUBLE");
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
-						Thread.sleep(interval * 1000);
+//						System.out.println("Blink1");
+						Thread.sleep(2 * interval * 1000);
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
+//						System.out.println("Blink2");
 						Thread.sleep(wait * 1000);
 					}
 				} else if (blinkMode == BLINKING_TRIPLE) {
@@ -203,13 +205,13 @@ public class PinCharCollector {
 						if (isPinCharListEmpty()) {
 							Thread.currentThread().interrupt();
 						}
-						System.out.println("BLINKING TRIPLE");
+//						System.out.println("BLINKING TRIPLE");
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
-						Thread.sleep(interval * 1000);
+						Thread.sleep(2 * interval * 1000);
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
-						Thread.sleep(interval * 1000);
+						Thread.sleep(2 * interval * 1000);
 						terminal.lightLED(PinCodeTerminal.GREEN_LED,
 								(int) interval);
 						Thread.sleep(wait * 1000);
