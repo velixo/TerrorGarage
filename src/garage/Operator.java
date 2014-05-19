@@ -36,12 +36,7 @@ public class Operator {
 	private JButton add, edit, remove;
 	private JMenu settings, view, about;
 	private JMenuBar menuBar;
-	private JMenuItem options, showBarcodeReaderEntry, showBarcodeReaderExit,
-			showBarcodeWrite, showPIN, showLock, showAbout;
-	private BarcodeReaderEntryTestDriver entryReader;
-	private BarcodeReaderExitTestDriver exitReader;
-	private boolean brexit = false;
-	private boolean brentry = false;
+	private JMenuItem options, showAbout;
 	private AutosaveTask task;
 
 	/**
@@ -231,6 +226,8 @@ public class Operator {
 			}
 			
 			textFields[0].setText(String.valueOf(task.saveFrequency));
+			textFields[1].setText(String.valueOf(database.getCapacity()));
+			textFields[2].setText(database.getDirectory());
 
 			SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
 
@@ -282,6 +279,8 @@ public class Operator {
 				} else {
 					
 					task.editSaveFrequency(Long.parseLong(textFields[0].getText()));
+					database.setCapacity(Integer.parseInt(textFields[1].getText()));
+					database.setDirectory(textFields[2].getText());
 					
 					StringBuilder sb = new StringBuilder();
 					
@@ -293,41 +292,6 @@ public class Operator {
 					
 					mainTextField.setText(sb.toString());
 					settingsFrame.setVisible(false);
-					
-//					int addUserErrorFeedback = database.addUser(
-//							textFields[0].getText(), textFields[1].getText(),
-//							textFields[2].getText(), textFields[3].getText(),
-//							textFields[4].getText());
-//					if (addUserErrorFeedback == database.PIN_LENGTH_ERROR) {
-//						JOptionPane.showMessageDialog(null,
-//								"PIN-koden är inte 4 siffror lång",
-//								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-//					} else if (addUserErrorFeedback == database.BARCODE_LENGTH_ERROR) {
-//						JOptionPane.showMessageDialog(null,
-//								"Streckkoden är inte 5 siffror lång",
-//								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-//					} else if (addUserErrorFeedback == database.NO_ADDUSER_ERROR) {
-//						StringBuilder sb = new StringBuilder();
-//
-//						sb.append("Cykelägaren har lagts till\n");
-//
-//						for (int i = 0; i < textFields.length; i++) {
-//							sb.append(labels[i]);
-//							sb.append(textFields[i].getText() + "\n");
-//						}
-//
-//						mainTextField.setText(sb.toString());
-//
-//						if (!textFields[5].getText().isEmpty()
-//								&& !textFields[5].getText().contains("")) {
-//							int barcodeCopies = Integer.valueOf(textFields[5]
-//									.getText());
-//							String barcode = textFields[1].getText();
-//							print(barcode, barcodeCopies);
-//						}
-//
-//						settingsFrame.setVisible(false);
-//					}
 				}
 			}
 		}
@@ -347,25 +311,9 @@ public class Operator {
 						+ "   Kodare:\t\t\tIsak Lindhé \n"
 						+ "   Projekthandledare:\t\tSandra Nilsson " + "\n\n                ETSA01, Datavetenskap, LTH, Lund, 2013 - 2014";
 
-		// private JTextField[] textFields;
 
 		public void actionPerformed(ActionEvent e) {
-			// int numPairs = labels.length;
-
-			// textFields = new JTextField[labels.length];
-			// JPanel p = new JPanel(new SpringLayout());
-			// for (int i = 0; i < numPairs; i++) {
-			// JLabel l = new JLabel(labels[i], JLabel.TRAILING);
-			// p.add(l);
-			// JTextField textField = new JTextField(10);
-			// textField.setEditable(false);
-			// textFields[i] = textField;
-			// l.setLabelFor(textField);
-			// p.add(textField);
-			// }
-
-			// SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
-
+		
 			JTextArea text = new JTextArea(labels);
 			text.setEditable(false);
 			text.setBackground(new Color(225, 225, 225));
@@ -376,9 +324,6 @@ public class Operator {
 			aboutFrame.setPreferredSize(new Dimension(450, 300));
 			aboutFrame.setResizable(false);
 			aboutFrame.add(text);
-
-			// p.setOpaque(true);
-			// aboutFrame.add(p, BorderLayout.CENTER);
 
 			aboutFrame.pack();
 			aboutFrame.setVisible(true);
@@ -411,7 +356,6 @@ public class Operator {
 
 			addFrame = new JFrame("SpringForm");
 			addFrame.setLayout(new BorderLayout());
-//			addFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 			p.setOpaque(true);
 			addFrame.add(p, BorderLayout.CENTER);
@@ -469,15 +413,15 @@ public class Operator {
 							textFields[0].getText(), textFields[1].getText(),
 							textFields[2].getText(), textFields[3].getText(),
 							textFields[4].getText());
-					if (addUserErrorFeedback == database.PIN_LENGTH_ERROR) {
+					if (addUserErrorFeedback == BicycleGarageDatabase.PIN_LENGTH_ERROR) {
 						JOptionPane.showMessageDialog(null,
 								"PIN-koden är inte 4 siffror lång",
 								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-					} else if (addUserErrorFeedback == database.BARCODE_LENGTH_ERROR) {
+					} else if (addUserErrorFeedback == BicycleGarageDatabase.BARCODE_LENGTH_ERROR) {
 						JOptionPane.showMessageDialog(null,
 								"Streckkoden är inte 5 siffror lång",
 								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-					} else if (addUserErrorFeedback == database.NO_ADDUSER_ERROR) {
+					} else if (addUserErrorFeedback == BicycleGarageDatabase.NO_ADDUSER_ERROR) {
 						StringBuilder sb = new StringBuilder();
 
 						sb.append("Cykelägaren har lagts till\n");
@@ -490,7 +434,7 @@ public class Operator {
 						mainTextField.setText(sb.toString());
 
 						if (!textFields[5].getText().isEmpty()
-								&& !textFields[5].getText().contains("")) {
+								&& !textFields[5].getText().contains(" ")) {
 							int barcodeCopies = Integer.valueOf(textFields[5]
 									.getText());
 							String barcode = textFields[1].getText();
@@ -579,7 +523,6 @@ public class Operator {
 
 			removeFrame = new JFrame("SpringForm");
 			removeFrame.setLayout(new BorderLayout());
-			removeFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 			p.setOpaque(true);
 			removeFrame.add(p, BorderLayout.CENTER);
@@ -697,7 +640,6 @@ public class Operator {
 
 			editFrame = new JFrame("SpringForm");
 			editFrame.setLayout(new BorderLayout());
-			editFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
 			p.setOpaque(true);
 			editFrame.add(p, BorderLayout.CENTER);
@@ -893,65 +835,12 @@ public class Operator {
 
 	}
 
-	// /**
-	// * Returnerar en specifik cykelägare.
-	// *
-	// * @param barcode
-	// * cykelägarens streckkod
-	// * @return cykelägaren
-	// */
-	// public User getUser(String barcode) {
-	// return null;
-	// }
-
-	public boolean running() {
-		if (frame.isVisible()) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Söker efter streckkoden för en viss cykelägare.
-	 * 
-	 * @param name
-	 *            cykelägarens namn
-	 * @return cykelägarens streckkod
-	 */
-	// public String findBarcodeWithName(String name) {
-	// return null;
-	// }
-
-	/**
-	 * Genererar en ny 4-siffrig PIN-kod.
-	 * 
-	 * @return ny PIN-kod
-	 */
-	// public String GeneratePin() {
-	// return null;
-	// }
-
-//	public static void main(String[] args) {
-//		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
-//		BicycleGarageManager manager = new BicycleGarageManager(database);
-//		database.load();
-//		Operator main = new Operator(database, manager);
-//		while (main.running()) {
-//			try {
-//				Thread.sleep(4000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			database.save();
-//		}
-//		System.exit(0);
-//	}
 
 	private void print(String barcode, int barcodeCopies) {
 		if (barcodeCopies > 0) {
 			for (int i = 0; i < barcodeCopies; i++) {
 				manager.print(barcode);
-				// System.out.println("Streckkodskopia nr: " + i);
+				 System.out.println("Streckkodskopia nr: " + i);
 			}
 		}
 	}
@@ -971,13 +860,11 @@ public class Operator {
 		public void run() {
 			try {
 				while(!Thread.currentThread().isInterrupted()){
-					Thread.sleep(saveFrequency * 1000);
+					Thread.sleep(saveFrequency * 1000 * 60);
 					database.save();
-					System.out.println("sparade");
 				}			
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				System.out.println("kom vi hit?");
 			}
 		}
 
