@@ -1,5 +1,7 @@
 package IntegrationTest;
 
+import java.io.File;
+
 import garage.*;
 import drivers.*;
 import testDrivers.*;
@@ -26,15 +28,15 @@ public class TestGarage {
 		pin = "1234";
 		barcode = "12345";
 		personNumber = "951120-0001";
-		dir = "/Users/rashaelmanzalawy/Desktop/Hej";
-		nonExistingDir = "";
+		dir = "testDirectory";
+		nonExistingDir = "testRemovedDirectory";
 		entryLock = new ElectronicLockTestDriver("Entry lock");
 		exitLock = new ElectronicLockTestDriver("Exit lock");
 		printer = new BarcodePrinterTestDriver();
 		terminal = new PinCodeTerminalTestDriver();
 		database = new BicycleGarageDatabase(300);
+		database.setDirectory(dir);
 		manager = new BicycleGarageManager(database);
-//		pinChar = new PinCharCollector(database, terminal, entryLock);
 		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
 		database.addUser(pin, barcode, name, telNr, personNumber);
 		user = database.getUserByBarcode(barcode);
@@ -66,7 +68,7 @@ public class TestGarage {
 
 	@Test
 	public void testBikeExit() {
-		// assertNotNull("User is null", user);
+		assertNotNull("User is null", user);
 		manager.entryBarcode(barcode);
 		user = database.getUserByBarcode(barcode);
 		for (int i = 0; i < 4; i++) {
@@ -76,9 +78,6 @@ public class TestGarage {
 		user = database.getUserByBarcode(barcode);
 		assertEquals("User hasn't taken bike out of garage", 0,
 				user.getBikesInGarage());
-
-		// System.out.println(user.getBikesInGarage());
-		// lägg till cykel och ta ut den, assertEquals user.bikesinGarage() = 0?
 	}
 
 	@Test
@@ -87,19 +86,21 @@ public class TestGarage {
 		database.removeUser(barcode);
 		user = database.getUserByBarcode(barcode);
 		assertNull("User is not null", user);
+		File f = new File(dir + "/" + barcode);
+		assertFalse("User file has not been deleted", f.exists());
 	}
 
 	@Test
 	public void testSaveAndLoad() {
 		database.setDirectory(dir);
 		database.save();
+		user = database.getUserByBarcode(barcode);
 		database = new BicycleGarageDatabase(300);
 		manager = new BicycleGarageManager(database);
 		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
 		database.setDirectory(dir);
 		database.load();
-		assertEquals("User's barcode is not the same after database restart ",
-				barcode, database.getUserByBarcode(barcode).getBarcode());
+		assertTrue("User is not saved after restart", database.getUserByBarcode(barcode).equals(user));
 
 	}
 
@@ -112,7 +113,7 @@ public class TestGarage {
 			database.removeUser(barcode);
 			database.addUser(newPin, barcode, name, telNr, personNumber);
 			database.modifyBikesInGarage(barcode, bikesInGarage);
-//			database.changeUserPin(barcode, newPin);
+			user = database.getUserByBarcode(barcode);
 			currentPin = user.getPin();
 			assertEquals("Pin has not changed", newPin, currentPin);
 
@@ -252,17 +253,18 @@ public class TestGarage {
 		assertNotNull("Terminal is null", terminal);
 		manager.entryCharacter('1');
 		assertFalse("Pin-terminalen är clearad", manager.isPinCharListEmpty());
+		
+//		try {
+//			wait(11 * 1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		
 		try {
-			wait(11 * 1000);
+		Thread.sleep(11 * 1000);
 		} catch (InterruptedException e) {
-			// Auto-generated catch block
 			e.printStackTrace();
 		}
-		// try {
-		// Thread.sleep(11 * 1000);
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
 		assertTrue(
 				"Pin-terminalen är inte clearad 10 sekunder efter inmatning",
 				manager.isPinCharListEmpty());
