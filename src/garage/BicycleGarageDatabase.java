@@ -180,6 +180,7 @@ public class BicycleGarageDatabase {
 				// Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 	}
 	
@@ -291,6 +292,7 @@ public class BicycleGarageDatabase {
 	public void modifyBikesInGarage(String barcode, int modifier){
 		barcodeMap.get(barcode).modBikesInGarage(modifier);
 		bikesInside += modifier;
+		save(barcode);
 	}
 	
 	/**
