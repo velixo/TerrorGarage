@@ -336,7 +336,7 @@ public class Operator {
 		private JFrame addFrame;
 		private JTextField[] textFields;
 		private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
-				"Telefonnummer: ", "Personnummer", "Antal Streckkodskopior: " };
+				"Telefonnummer: ", "Personnummer: ", "Antal Streckkodskopior: " };
 
 		public void actionPerformed(ActionEvent e) {
 			int numPairs = labels.length;
@@ -840,7 +840,6 @@ public class Operator {
 		if (barcodeCopies > 0) {
 			for (int i = 0; i < barcodeCopies; i++) {
 				manager.print(barcode);
-				 System.out.println("Streckkodskopia nr: " + i);
 			}
 		}
 	}
