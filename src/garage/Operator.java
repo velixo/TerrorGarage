@@ -38,6 +38,11 @@ public class Operator {
 	private JMenuBar menuBar;
 	private JMenuItem options, showBarcodeReaderEntry, showBarcodeReaderExit,
 			showBarcodeWrite, showPIN, showLock, showAbout;
+	private BarcodeReaderEntryTestDriver entryReader;
+	private BarcodeReaderExitTestDriver exitReader;
+	private boolean brexit = false;
+	private boolean brentry = false;
+	private AutosaveTask task;
 
 	/**
 	 * Skapar ett GUI med alla knappar, fönster och dylikt som ska finnas med i
@@ -52,10 +57,12 @@ public class Operator {
 		database.load();
 
 		// Autosavingthreaden start
-		AutosaveTask task = new AutosaveTask(4);
+		task = new AutosaveTask(4);
+
 		Thread autoSaveThread = new Thread(task);
 		autoSaveThread.start();
 		// Autosavingthreaden slut
+		
 
 		buttonPanel = new JPanel();
 		buttonPanel.setVisible(true);
@@ -88,6 +95,7 @@ public class Operator {
 				ActionEvent.ALT_MASK));
 		options.getAccessibleContext().setAccessibleDescription(
 				"This doesn't really do anything");
+		options.addActionListener(new Setting());
 		settings.add(options);
 
 		// showBarcodeReaderEntry = new
@@ -169,6 +177,7 @@ public class Operator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		task.run();
 	}
 
 	// KANSKE HA MED DETTA: FET EJ
@@ -206,6 +215,132 @@ public class Operator {
 	//
 	// }
 	//
+	class Setting implements ActionListener {
+		
+		private JFrame settingsFrame;
+		private String[] labels = {"Sparfrekvens (min): ", "Kapacitet (antal cyklar): ", "Sökväg för inläsning/sparning: "};
+		private JTextField[] textFields;
+		
+		public void actionPerformed(ActionEvent e) {
+			
+			int numPairs = labels.length;
+
+			textFields = new JTextField[labels.length];
+			JPanel p = new JPanel(new SpringLayout());
+			for (int i = 0; i < numPairs; i++) {
+				JLabel l = new JLabel(labels[i], JLabel.TRAILING);
+				p.add(l);
+				JTextField textField = new JTextField(10);
+				textFields[i] = textField;
+				l.setLabelFor(textField);
+				p.add(textField);
+			}
+			
+			textFields[0].setText(String.valueOf(task.saveFrequency));
+
+			SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
+
+			settingsFrame = new JFrame("SpringForm");
+			settingsFrame.setLayout(new BorderLayout());
+			settingsFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+			p.setOpaque(true);
+			settingsFrame.add(p, BorderLayout.CENTER);
+
+			JPanel buttons = new JPanel();
+			buttons.setLayout(new BorderLayout());
+
+			JButton cancel = new JButton("Avbryt");
+			cancel.addActionListener(new Cancel());
+
+			JButton apply = new JButton(
+					"Verkställ");
+			apply.addActionListener(new Apply());
+
+			buttons.add(cancel, BorderLayout.LINE_START);
+			buttons.add(apply, BorderLayout.LINE_END);
+
+			settingsFrame.add(buttons, BorderLayout.SOUTH);
+			settingsFrame.pack();
+			settingsFrame.setVisible(true);
+			
+		}
+		
+		class Cancel implements ActionListener {
+
+			public void actionPerformed(ActionEvent arg0) {
+				settingsFrame.setVisible(false);
+			}
+		}
+		
+		class Apply implements ActionListener {
+
+			public void actionPerformed(ActionEvent arg0) {
+				mainTextField.setText("");
+				if (textFields[0].getText().equals("")
+						|| textFields[1].getText().equals("")
+						|| textFields[2].getText().equals("")) {
+
+					JOptionPane.showMessageDialog(null,
+							"Var vänlig fyll i alla uppgifter",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+
+				} else {
+					
+					task.editSaveFrequency(Long.parseLong(textFields[0].getText()));
+					
+					StringBuilder sb = new StringBuilder();
+					
+					for (int i = 0; i < textFields.length; i++){
+						sb.append(labels[i]);
+						sb.append(textFields[i].getText() + "\n");
+						
+					}
+					
+					mainTextField.setText(sb.toString());
+					settingsFrame.setVisible(false);
+					
+//					int addUserErrorFeedback = database.addUser(
+//							textFields[0].getText(), textFields[1].getText(),
+//							textFields[2].getText(), textFields[3].getText(),
+//							textFields[4].getText());
+//					if (addUserErrorFeedback == database.PIN_LENGTH_ERROR) {
+//						JOptionPane.showMessageDialog(null,
+//								"PIN-koden är inte 4 siffror lång",
+//								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+//					} else if (addUserErrorFeedback == database.BARCODE_LENGTH_ERROR) {
+//						JOptionPane.showMessageDialog(null,
+//								"Streckkoden är inte 5 siffror lång",
+//								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+//					} else if (addUserErrorFeedback == database.NO_ADDUSER_ERROR) {
+//						StringBuilder sb = new StringBuilder();
+//
+//						sb.append("Cykelägaren har lagts till\n");
+//
+//						for (int i = 0; i < textFields.length; i++) {
+//							sb.append(labels[i]);
+//							sb.append(textFields[i].getText() + "\n");
+//						}
+//
+//						mainTextField.setText(sb.toString());
+//
+//						if (!textFields[5].getText().isEmpty()
+//								&& !textFields[5].getText().contains("")) {
+//							int barcodeCopies = Integer.valueOf(textFields[5]
+//									.getText());
+//							String barcode = textFields[1].getText();
+//							print(barcode, barcodeCopies);
+//						}
+//
+//						settingsFrame.setVisible(false);
+//					}
+				}
+			}
+		}
+
+		
+	}
+	
 	class ShowAbout implements ActionListener {
 
 		private JFrame aboutFrame;
@@ -775,12 +910,12 @@ public class Operator {
 	// return null;
 	// }
 
-//	public boolean running() {
-//		if (frame.isVisible()) {
-//			return true;
-//		}
-//		return false;
-//	}
+	public boolean running() {
+		if (frame.isVisible()) {
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * Söker efter streckkoden för en viss cykelägare.
@@ -842,12 +977,14 @@ public class Operator {
 		public void run() {
 
 			try {
-				Thread.sleep(saveFrequency * 60 * 1000);
+				Thread.sleep(saveFrequency * 100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				System.out.println("kom vi hit?");
 			}
 
 			database.save();
+			System.out.println("sparade");
 			// continue;
 
 		}

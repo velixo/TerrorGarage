@@ -23,6 +23,13 @@ public class BicycleGarageTest {
         
         while(true) {
         	if (!op.running()) {
+        		entryLock = null;
+        		exitLock = null;
+        		printer = null;
+        		terminal = null;
+        		readerEntry = null;
+        		readerExit = null;
+        		
 				System.exit(0);
 			}
         }
