@@ -615,7 +615,7 @@ public class Operator {
 				buttons.setLayout(new BorderLayout());
 
 				JButton cancel = new JButton("Avbryt");
-				cancel.addActionListener(new Cancel());
+				cancel.addActionListener(new SubCancel());
 
 				JButton apply = new JButton("Godkänn");
 				apply.addActionListener(new SubApply());
@@ -696,6 +696,13 @@ public class Operator {
 				editSubFrame.setVisible(false);
 			}
 
+		}
+		
+		class SubCancel implements ActionListener {
+
+			public void actionPerformed(ActionEvent arg0) {
+				editSubFrame.setVisible(false);
+			}
 		}
 
 	}
