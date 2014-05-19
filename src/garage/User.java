@@ -3,6 +3,7 @@ package garage;
 public class User{
 	private String name;
 	private String telNr;
+	private String personNr;
 	private String barcode;
 	private String pin;
 	private int bikesInGarage;
@@ -19,11 +20,12 @@ public class User{
 	 * @param p
 	 * 	userns PIN-kod
 	 */
-	public User(String n, String t, String b, String p){
+	public User(String n, String t, String b, String p, String pNr){
 		name = n;
 		telNr = t;
 		barcode = b;
 		pin = p;
+		personNr = pNr;
 	}
 	
 	/**
@@ -55,6 +57,13 @@ public class User{
 	}
 	
 	/**
+	 * Returnerar userns personnummer.
+	 */
+	public String getPersonNr(){
+		return personNr;
+	}
+	
+	/**
 	 * Returnerar antalet cyklar usern har i garaget.
 	 */
 	public int getBikesInGarage(){
@@ -68,6 +77,11 @@ public class User{
 //	}
 	
 	//OBS! ANVÄND ENDAST GENOM DATABASEN!
+	/** OBS! FÅR ENDAST ANVÄNDAS I/GENOM DATABASEN! Metod som ändrar en users pin
+	 * 
+	 * @param p
+	 * 		userns nya pin
+	 * */
 	public void setPin(String p){
 		pin = p;
 	}

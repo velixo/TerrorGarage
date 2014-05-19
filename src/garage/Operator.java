@@ -55,6 +55,13 @@ public class Operator {
 	public Operator(BicycleGarageDatabase database, BicycleGarageManager manager) {
 		this.database = database;
 		this.manager = manager;
+		database.load();
+		
+		//Autosavingthreaden start
+		AutosaveTask task = new AutosaveTask(4);
+		Thread autoSaveThread = new Thread(task);
+		autoSaveThread.start();
+		//Autosavingthreaden slut
 
 		buttonPanel = new JPanel();
 		buttonPanel.setVisible(true);
@@ -127,7 +134,7 @@ public class Operator {
 		showAbout.getAccessibleContext().setAccessibleDescription("");
 		about.add(showAbout);
 
-		add = new JButton("Lägg till cykelägare");
+		add = new JButton("Lägg till ny cykelägare");
 		add.addActionListener(new AddUser());
 		edit = new JButton("Redigera cykelägare");
 		edit.addActionListener(new EditUser());
@@ -204,7 +211,7 @@ public class Operator {
 		private JFrame addFrame;
 		private JTextField[] textFields;
 		private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
-				"Telefonnummer: ", "Antal Streckkodskopior: " };
+				"Telefonnummer: ", "Personnummer", "Antal Streckkodskopior: " };
 
 		public void actionPerformed(ActionEvent e) {
 			int numPairs = labels.length;
@@ -235,7 +242,7 @@ public class Operator {
 			JButton cancel = new JButton("Avbryt");
 			cancel.addActionListener(new Cancel());
 
-			JButton apply = new JButton("Verkställ");
+			JButton apply = new JButton("Lägg till användare och skriv ut streckkod(er)");
 			apply.addActionListener(new Apply());
 
 			JButton generate = new JButton("Generera");
@@ -269,31 +276,46 @@ public class Operator {
 						|| textFields[1].getText().equals("")
 						|| textFields[2].getText().equals("")
 						|| textFields[3].getText().equals("")
-						|| textFields[4].getText().equals("")) {
+						|| textFields[4].getText().equals("")
+						|| textFields[5].getText().equals("")) {
 
 					JOptionPane.showMessageDialog(null,
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
 				} else {
-
-					database.addUser(textFields[0].getText(),
+					int addUserErrorFeedback = database.addUser(textFields[0].getText(),
 							textFields[1].getText(), textFields[2].getText(),
-							textFields[3].getText());
+							textFields[3].getText(), textFields[4].getText());
+					if (addUserErrorFeedback == database.PIN_LENGTH_ERROR) {
+						JOptionPane.showMessageDialog(null,
+								"PIN-koden är inte 4 siffror lång",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else if (addUserErrorFeedback == database.BARCODE_LENGTH_ERROR) {
+						JOptionPane.showMessageDialog(null,
+								"Streckkoden är inte 5 siffror lång",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else if (addUserErrorFeedback == database.NO_ADDUSER_ERROR) {
+						StringBuilder sb = new StringBuilder();
 
-					StringBuilder sb = new StringBuilder();
+						sb.append("Cykelägaren har lagts till\n");
 
-					sb.append("Cykelägaren har lagts till\n");
+						for (int i = 0; i < textFields.length; i++) {
+							sb.append(labels[i]);
+							sb.append(textFields[i].getText() + "\n");
+						}
 
-					for (int i = 0; i < textFields.length; i++) {
-						sb.append(labels[i]);
-						sb.append(textFields[i].getText() + "\n");
+						mainTextField.setText(sb.toString());
+						
+						if (!textFields[5].getText().isEmpty() && !textFields[5].getText().contains("")) {
+							int barcodeCopies = Integer.valueOf(textFields[5].getText());
+							String barcode = textFields[1].getText();
+							print(barcode, barcodeCopies);						
+						}
+
+						addFrame.setVisible(false);
 					}
-
-					mainTextField.setText(sb.toString());
-
-					addFrame.setVisible(false);
-				}
+				} 
 			}
 		}
 
@@ -351,7 +373,6 @@ public class Operator {
 	}
 
 	class RemoveUser implements ActionListener {
-
 		private JFrame removeFrame;
 		private JTextField[] textFields;
 		private String[] labels = { "Cykelägarens streckkodsnummer: ", "PIN: " };
@@ -418,6 +439,16 @@ public class Operator {
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
+				} else if (textFields[1].getText().equals(
+						database.getUserByBarcode(
+								textFields[0].getText()
+												 ).getPin()
+														 )
+						  ) 
+				{
+					JOptionPane.showMessageDialog(null,
+							"Den inmatade PIN-koden matcher inte PIN-koden som  är associerad med den inmatade streckkoden",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 				} else if (database.getUserByBarcode(textFields[0].getText())
 						.getBikesInGarage() > 0) {
 					if (JOptionPane
@@ -460,7 +491,7 @@ public class Operator {
 
 		private JFrame editFrame;
 		private JTextField[] textFields;
-		private String[] labels = { "Cykelägarens streckkodsnummer: ", "Namn: " };
+		private String[] labels = { "Cykelägarens streckkodsnummer: ", "Personnummer: " };
 		private User u;
 		private JTextField[] textSubFields;
 		private JFrame editSubFrame;
@@ -515,69 +546,90 @@ public class Operator {
 		class Apply implements ActionListener {
 
 			private String[] labels = { "PIN: ", "Streckkod: ", "Namn: ",
-					"Telefonnummer: ", "Antal Streckkodskopior: ",
+					"Telefonnummer: ", "Personnummer", "Antal Streckkodskopior: ",
 					"Antal cyklar i garaget: " };
 
 			public void actionPerformed(ActionEvent e) {
 				editFrame.setVisible(false);
-				u = database.getUserByBarcode(textFields[0].getText());
-
-				if (u != null) {
-
-					int numPairs = labels.length;
-
-					textSubFields = new JTextField[labels.length];
-					JPanel p = new JPanel(new SpringLayout());
-					for (int i = 0; i < numPairs; i++) {
-						JLabel l = new JLabel(labels[i], JLabel.TRAILING);
-						p.add(l);
-						JTextField textField = new JTextField(10);
-						textSubFields[i] = textField;
-						l.setLabelFor(textField);
-						p.add(textField);
+				if (!textFields[0].getText().isEmpty()) {
+					u = database.getUserByBarcode(textFields[0].getText());
+					if (u == null) {
+						JOptionPane.showMessageDialog(null,
+								"Streckkodsnumret existerar ej",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else {						
+						findUser(u);
 					}
-
-					textSubFields[0].setText(u.getPin());
-					textSubFields[1].setText(u.getBarcode());
-					textSubFields[2].setText(u.getName());
-					textSubFields[3].setText(u.getTelNr());
-					textSubFields[5].setText(String.valueOf(u
-							.getBikesInGarage()));
-
-					SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
-
-					editSubFrame = new JFrame("SpringForm");
-					editSubFrame.setLayout(new BorderLayout());
-					editSubFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-
-					p.setOpaque(true);
-					editSubFrame.add(p, BorderLayout.CENTER);
-
-					JPanel buttons = new JPanel();
-					buttons.setLayout(new BorderLayout());
-
-					JButton cancel = new JButton("Avbryt");
-					cancel.addActionListener(new Cancel());
-
-					JButton apply = new JButton("Verkställ");
-					apply.addActionListener(new SubApply());
-
-					JButton generate = new JButton("Generera");
-					generate.addActionListener(new Generate());
-
-					buttons.add(cancel, BorderLayout.LINE_START);
-					buttons.add(apply, BorderLayout.LINE_END);
-					buttons.add(generate, BorderLayout.SOUTH);
-
-					editSubFrame.add(buttons, BorderLayout.SOUTH);
-					editSubFrame.pack();
-					editSubFrame.setVisible(true);
-
+				} else if (!textFields[1].getText().isEmpty()) {
+					u = database.getUserByPersonnumber(textFields[1].getText());
+					if (u == null) {
+						JOptionPane.showMessageDialog(null,
+								"Personnumret existerar ej",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+					} else {						
+						findUser(u);
+					}
 				} else {
 					JOptionPane.showMessageDialog(null,
 							"Var vänlig fyll i alla uppgifter",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 				}
+
+				
+			}
+			
+			private void findUser(User u) {
+				int numPairs = labels.length;
+
+				textSubFields = new JTextField[labels.length];
+				JPanel p = new JPanel(new SpringLayout());
+				for (int i = 0; i < numPairs; i++) {
+					JLabel l = new JLabel(labels[i], JLabel.TRAILING);
+					p.add(l);
+					JTextField textField = new JTextField(10);
+					textSubFields[i] = textField;
+					l.setLabelFor(textField);
+					p.add(textField);
+				}
+
+				textSubFields[0].setText(u.getPin());
+				textSubFields[1].setText(u.getBarcode());
+				textSubFields[1].setEditable(false);
+				textSubFields[2].setText(u.getName());
+				textSubFields[3].setText(u.getTelNr());
+//				textSubFields[4].setText("0");		//kan vara bra att det står så från början
+				textSubFields[5].setText(u.getPersonNr());
+				textSubFields[6].setText(String.valueOf(u
+						.getBikesInGarage()));
+
+				SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
+
+				editSubFrame = new JFrame("SpringForm");
+				editSubFrame.setLayout(new BorderLayout());
+				editSubFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+				p.setOpaque(true);
+				editSubFrame.add(p, BorderLayout.CENTER);
+
+				JPanel buttons = new JPanel();
+				buttons.setLayout(new BorderLayout());
+
+				JButton cancel = new JButton("Avbryt");
+				cancel.addActionListener(new SubCancel());
+
+				JButton apply = new JButton("Godkänn");
+				apply.addActionListener(new SubApply());
+
+				JButton generate = new JButton("Generera");
+				generate.addActionListener(new Generate());
+
+				buttons.add(cancel, BorderLayout.LINE_START);
+				buttons.add(apply, BorderLayout.LINE_END);
+				buttons.add(generate, BorderLayout.SOUTH);
+
+				editSubFrame.add(buttons, BorderLayout.SOUTH);
+				editSubFrame.pack();
+				editSubFrame.setVisible(true);
 			}
 
 		}
@@ -619,7 +671,7 @@ public class Operator {
 				database.removeUser(u.getBarcode());
 				database.addUser(textSubFields[0].getText(),
 						textSubFields[1].getText(), textSubFields[2].getText(),
-						textSubFields[3].getText());
+						textSubFields[3].getText(), textSubFields[4].getText());
 //				database.modifyBikesInGarage();
 
 				StringBuilder sb = new StringBuilder();
@@ -629,34 +681,49 @@ public class Operator {
 						+ "\nNamn: " + u.getName() + " -> "
 						+ textSubFields[2].getText() + "\nTelNr: "
 						+ u.getTelNr() + " -> " + textSubFields[3].getText()
+						+ "\nPersonNr: " + u.getPersonNr()
 						+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
 						+ " -> " + textSubFields[5].getText());
 				mainTextField.setText("");
 				mainTextField.setText(sb.toString());
+				
+				if (!textSubFields[4].getText().isEmpty() && !textSubFields[4].getText().contains(" ")) {			//fixade bugg #4
+					int barcodeCopies = Integer.valueOf(textSubFields[4].getText());
+					String barcode = textSubFields[1].getText();
+					print(barcode, barcodeCopies);					
+				}
+				
 				editSubFrame.setVisible(false);
 			}
 
 		}
+		
+		class SubCancel implements ActionListener {
 
-	}
-
-	/**
-	 * Returnerar en specifik cykelägare.
-	 * 
-	 * @param barcode
-	 *            cykelägarens streckkod
-	 * @return cykelägaren
-	 */
-	public User getUser(String barcode) {
-		return null;
-	}
-
-	public boolean running() {
-		if (frame.isVisible()) {
-			return true;
+			public void actionPerformed(ActionEvent arg0) {
+				editSubFrame.setVisible(false);
+			}
 		}
-		return false;
+
 	}
+
+//	/**
+//	 * Returnerar en specifik cykelägare.
+//	 * 
+//	 * @param barcode
+//	 *            cykelägarens streckkod
+//	 * @return cykelägaren
+//	 */
+//	public User getUser(String barcode) {
+//		return null;
+//	}
+
+//	public boolean running() {
+//		if (frame.isVisible()) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Söker efter streckkoden för en viss cykelägare.
@@ -665,34 +732,80 @@ public class Operator {
 	 *            cykelägarens namn
 	 * @return cykelägarens streckkod
 	 */
-	public String findBarcodeWithName(String name) {
-		return null;
-	}
+//	public String findBarcodeWithName(String name) {
+//		return null;
+//	}
 
 	/**
 	 * Genererar en ny 4-siffrig PIN-kod.
 	 * 
 	 * @return ny PIN-kod
 	 */
-	public String GeneratePin() {
-		return null;
-	}
+//	public String GeneratePin() {
+//		return null;
+//	}
 
+<<<<<<< HEAD
 	public static void main(String[] args) {
 		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
 		BicycleGarageManager manager = new BicycleGarageManager(database);
 		database.load();
 		Operator main = new Operator(database, manager);
 		while (main.running()) {
+=======
+//	public static void main(String[] args) {
+//		BicycleGarageDatabase database = new BicycleGarageDatabase(10000);
+//		BicycleGarageManager manager = new BicycleGarageManager(database);
+//		Operator main = new Operator(database, manager);
+//		while (main.running()) {
+//			try {
+//				Thread.sleep(4000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			continue;
+//		}
+//		System.exit(0);
+//
+//	}
+	
+	private void print(String barcode, int barcodeCopies) {
+		if (barcodeCopies > 0) {						
+			for (int i = 0; i < barcodeCopies; i++) {
+				manager.print(barcode);
+//				System.out.println("Streckkodskopia nr: " + i);
+			}
+		}
+	}
+	
+	
+	private class AutosaveTask implements Runnable {
+		private volatile long saveFrequency;
+		
+		/** 
+		 *  @param saveFrequency
+		 *  	hur många sekunder det är mellan varje gång databasen autosparas
+		 * */
+		public AutosaveTask(long saveFrequency) {
+			this.saveFrequency = saveFrequency;
+		}
+		
+		public void run () {
+>>>>>>> 68123dd8da3c93f44ccb86cad9875900aec7bb8f
 			try {
-				Thread.sleep(4000);
+				Thread.sleep(saveFrequency * 1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+<<<<<<< HEAD
 			database.save();
 			continue;
+=======
+		} 
+		
+		public void editSaveFrequency(long saveFrequency) {
+			this.saveFrequency = saveFrequency;
+>>>>>>> 68123dd8da3c93f44ccb86cad9875900aec7bb8f
 		}
-		System.exit(0);
-
 	}
 }

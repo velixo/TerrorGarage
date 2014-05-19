@@ -44,6 +44,7 @@ public class BicycleGarageManager {
 		this.entryLock = entryLock;
 		this.exitLock = exitLock;
 		this.terminal = terminal;
+//		this.charCollecter = charCollecter;
 		charCollecter = new PinCharCollector(database, this.terminal, this.entryLock);
 
 	}
@@ -89,15 +90,16 @@ public class BicycleGarageManager {
 		charCollecter.add(c);
 	}
 
-	/**
-	 * Registrerar databasen som skall användas.
-	 * 
-	 * @param database
-	 *			databasen som ska registreras
-	 */
-	public void registerDatabase(BicycleGarageDatabase database) {
-		this.database = database;
-	}
+//				Kom på att denna aldrig används då man alltid behöver en database i konstruktorn på managern
+//	/**
+//	 * Registrerar databasen som skall användas.
+//	 * 
+//	 * @param database
+//	 *			databasen som ska registreras
+//	 */
+//	public void registerDatabase(BicycleGarageDatabase database) {
+//		this.database = database;
+//	}
 	
 	/** 
 	 * Skriver ut streckkoden barcode.
@@ -107,5 +109,10 @@ public class BicycleGarageManager {
 	 */
 	public void print(String barcode) {
 		printer.printBarcode(barcode);
+	}
+	
+	/** Returnerar om pinCharCollectern som manager använder är tom eller ej.*/
+	public boolean isPinCharListEmpty() {
+		return charCollecter.isPinCharListEmpty();
 	}
 }
