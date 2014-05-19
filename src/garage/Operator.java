@@ -233,13 +233,13 @@ public class Operator {
 
 		private JFrame aboutFrame;
 		private String labels = 
-				"\n                Bicycle Garage Manager\n\n   Koordinatör:\t\t\tVilhelm Lundqvist \n"
+				"\n                Bicycle Garage Manager\n\n   Koordinator:\t\t\tVilhelm Lundqvist \n"
 						+ "   Allt-i-allo:\t\t\tAxel Wihlborg-Rasmusen \n"
 						+ "   Kodarassistent/whitebox-testare:\tRasha El Manzalawy \n"
 						+ "   Blackbox-testare/textskrivarassistent:\tMaja Scherman \n"
 						+ "   Kodare:\t\t\tShan Langlais \n"
 						+ "   Kodare:\t\t\tIsak Lindhé \n"
-						+ "   Projekthandledare:\t\tSandra Nilsson " + "\n\n                ETSA01, Datavetenskap, LTH, Lund, 2013 - 2014";
+						+ "   Projekthandledare:\t\tSandra Nilsson " + "\n\n                ETSA01, Datavetenskap, LTH, Lund, 2014 - 2014";
 
 
 		public void actionPerformed(ActionEvent e) {
