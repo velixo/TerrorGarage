@@ -157,30 +157,30 @@ public class BicycleGarageDatabase {
 	 *            streckkoden refererar till den usern som ska sparas
 	 */
 	public void save(String barcode){
-		File userdir = new File(savedir);
-		if(!userdir.exists()){
-			userdir.mkdir();
+		if (!savedir.isEmpty()) {
+			File userdir = new File(savedir);
+			if(!userdir.exists()){
+				userdir.mkdir();
+			}
+			try {
+				FileWriter fw = new FileWriter(savedir + "/" + barcode);
+				User u = barcodeMap.get(barcode);
+				fw.write("" +
+						u.getBarcode() + "\n" +
+						u.getName() + "\n" + 
+						u.getTelNr() + "\n" + 
+						u.getPin() + "\n" + 
+						u.getPersonNr() + "\n" +
+						u.getBikesInGarage());
+				
+				//FELVARNING! KAN MÖJLIGTVIS STÄNGA STREAMEN PERMANENT SÅ ATT DET INTE GÅR ATT SKRIVA TILL FILEN IGEN FÖRENS PROGRAMMET STARTAS OM.
+				fw.close();
+				
+			} catch (IOException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		try {
-			FileWriter fw = new FileWriter(savedir + "/" + barcode);
-			User u = barcodeMap.get(barcode);
-			fw.write("" +
-					u.getBarcode() + "\n" +
-					u.getName() + "\n" + 
-					u.getTelNr() + "\n" + 
-					u.getPin() + "\n" + 
-					u.getPersonNr() + "\n" +
-					u.getBikesInGarage());
-			
-			//FELVARNING! KAN MÖJLIGTVIS STÄNGA STREAMEN PERMANENT SÅ ATT DET INTE GÅR ATT SKRIVA TILL FILEN IGEN FÖRENS PROGRAMMET STARTAS OM.
-			fw.close();
-			
-		} catch (IOException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
 	}
 	
 	/**

@@ -56,7 +56,7 @@ public class PinCharCollector {
 		if (pinCharList.charAt(0) == '*') {
 			
 			if (pinCharList.length() < 5) {
-				if (task.getBlinkMode() < BLINKING_SINGLE) {
+				if (task.getBlinkMode() != BLINKING_SINGLE) {
 					blinkingStarted = true;
 					blinkThread = new Thread(task);
 					task.setBlinkMode(BLINKING_SINGLE);
@@ -65,7 +65,7 @@ public class PinCharCollector {
 			}
 			
 			else if (pinCharList.length() >= 5 && pinCharList.length() < 10) {
-				if (task.getBlinkMode() < BLINKING_DOUBLE) {
+				if (task.getBlinkMode() != BLINKING_DOUBLE) {
 					blinkThread.interrupt();
 					blinkThread = new Thread(task);
 					task.setBlinkMode(BLINKING_DOUBLE);
@@ -74,7 +74,7 @@ public class PinCharCollector {
 			}
 			
 			else if (pinCharList.length() >= 10 && pinCharList.length() < 14) {
-				if (task.getBlinkMode() < BLINKING_TRIPLE) {
+				if (task.getBlinkMode() != BLINKING_TRIPLE) {
 					blinkThread.interrupt();
 					blinkThread = new Thread(task);
 					task.setBlinkMode(BLINKING_TRIPLE);
@@ -120,7 +120,6 @@ public class PinCharCollector {
 			if (database.checkPinRegistered(pin)) {				
 				database.setBikesRetrievable(pin);
 				entryLock.open(10);
-				//kommer koden fortsätta? eller stannar den upp i 3 sekunder?
 				terminal.lightLED(terminal.GREEN_LED, 3);
 				clear();
 			} else {
