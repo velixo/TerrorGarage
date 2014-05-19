@@ -231,6 +231,10 @@ public class BicycleGarageDatabase {
 	 * @param dir
 	 *            plats som filen sparas på (t.e.x "C:/Users/Database/save.txt")
 	 */
+	public String getDirectory(){
+		return savedir;
+	}
+	
 	public void setDirectory(String dir){
 		savedir = dir;
 	}
@@ -308,6 +312,10 @@ public class BicycleGarageDatabase {
 	 */
 	public boolean isGarageFull(){
 		return bikesInside>=capacity;
+	}
+	
+	public int getCapacity(){
+		return capacity;
 	}
 	
 	/**
