@@ -14,7 +14,7 @@ public class TestGarage {
 	private ElectronicLock entryLock;
 	private ElectronicLock exitLock;
 	private PinCodeTerminal terminal;
-	private PinCharCollector pinChar;
+//	private PinCharCollector pinChar;
 	private BarcodePrinter printer;
 	private User user;
 	private String namn, telNr, pin, barcode, personNumber, dir;
@@ -33,8 +33,8 @@ public class TestGarage {
 		terminal = new PinCodeTerminalTestDriver();
 		database = new BicycleGarageDatabase(300);
 		manager = new BicycleGarageManager(database);
-		pinChar = new PinCharCollector(database, terminal, entryLock);
-		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal, pinChar);
+//		pinChar = new PinCharCollector(database, terminal, entryLock);
+		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
 		database.addUser(pin, barcode, namn, telNr, personNumber);
 		user = database.getUserByBarcode(barcode);
 		terminal.register(manager);
@@ -94,7 +94,7 @@ public class TestGarage {
 		database.save();
 		database = new BicycleGarageDatabase(300);
 		manager = new BicycleGarageManager(database);
-		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal, pinChar);
+		manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
 		database.setDirectory(dir);
 		database.load();
 		assertEquals("User's barcode is not the same after database restart ",
@@ -243,10 +243,10 @@ public class TestGarage {
 	@Test
 	public void testPinTerminalTimeoutCharlistClear() {
 		assertTrue("Pin-terminalen är inte clearad innan inmatning",
-				pinChar.isPinCharListEmpty());
+				manager.isPinCharListEmpty());
 		assertNotNull("Terminal is null", terminal);
 		manager.entryCharacter('1');
-		assertFalse("Pin-terminalen är clearad", pinChar.isPinCharListEmpty());
+		assertFalse("Pin-terminalen är clearad", manager.isPinCharListEmpty());
 		try {
 			wait(11 * 1000);
 		} catch (InterruptedException e) {
@@ -260,7 +260,7 @@ public class TestGarage {
 		// }
 		assertTrue(
 				"Pin-terminalen är inte clearad 10 sekunder efter inmatning",
-				pinChar.isPinCharListEmpty());
+				manager.isPinCharListEmpty());
 	}
 
 	@Test

@@ -129,7 +129,7 @@ public class PinCharCollector {
 		pinCharList.delete(0, length);
 	}
 	
-	/** METOD SOM ENDAST ANVÄNDS I JUNIT-TESTEN
+	/** OBS! FÅR ENDAST ANVÄNDAS GENOM/I BICYCLEGARAGEMANAGER
 	 * Returnar om pin-terminalen har några inmatningar sparade eller inte (om listan med inmatningar/chars
 	 * är tom eller ej)
 	 */
