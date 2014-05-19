@@ -38,10 +38,6 @@ public class Operator {
 	private JMenuBar menuBar;
 	private JMenuItem options, showBarcodeReaderEntry, showBarcodeReaderExit,
 			showBarcodeWrite, showPIN, showLock, showAbout;
-	private BarcodeReaderEntryTestDriver entryReader;
-	private BarcodeReaderExitTestDriver exitReader;
-	private boolean brexit = false;
-	private boolean brentry = false;
 
 	/**
 	 * Skapar ett GUI med alla knappar, fönster och dylikt som ska finnas med i
@@ -846,7 +842,7 @@ public class Operator {
 		public void run() {
 
 			try {
-				Thread.sleep(saveFrequency * 1000);
+				Thread.sleep(saveFrequency * 60 * 1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

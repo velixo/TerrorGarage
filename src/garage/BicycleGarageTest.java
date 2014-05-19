@@ -13,12 +13,18 @@ public class BicycleGarageTest {
         ElectronicLock exitLock = new ElectronicLockTestDriver("Exit lock");
         BarcodePrinter printer = new BarcodePrinterTestDriver();
         PinCodeTerminal terminal = new PinCodeTerminalTestDriver();
-//        PinCharCollector charCollecter = new PinCharCollector(database, terminal, entryLock);
+//		PinCharCollector charCollecter = new PinCharCollector(database, terminal, entryLock);
         manager.registerHardwareDrivers(printer, entryLock, exitLock, terminal);
         terminal.register(manager);
         BarcodeReader readerEntry = new BarcodeReaderEntryTestDriver();
         BarcodeReader readerExit = new BarcodeReaderExitTestDriver();
         readerEntry.register(manager);
         readerExit.register(manager);
+        
+        while(true) {
+        	if (!op.running()) {
+				System.exit(0);
+			}
+        }
 	}
 }
