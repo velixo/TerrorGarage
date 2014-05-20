@@ -173,7 +173,7 @@ public class Operator {
 			cancel.addActionListener(new Cancel());
 
 			JButton apply = new JButton(
-					"Verkställ");
+					"Godkänn");
 			apply.addActionListener(new Apply());
 
 			buttons.add(cancel, BorderLayout.LINE_START);
