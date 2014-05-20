@@ -337,39 +337,48 @@ public class Operator {
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
 				} else {
-					int addUserErrorFeedback = database.addUser(
-							textFields[0].getText(), textFields[1].getText(),
-							textFields[2].getText(), textFields[3].getText(),
-							textFields[4].getText());
-					if (addUserErrorFeedback == BicycleGarageDatabase.PIN_LENGTH_ERROR) {
-						JOptionPane.showMessageDialog(null,
-								"PIN-koden är inte 4 siffror lång",
-								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-					} else if (addUserErrorFeedback == BicycleGarageDatabase.BARCODE_LENGTH_ERROR) {
-						JOptionPane.showMessageDialog(null,
-								"Streckkoden är inte 5 siffror lång",
-								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-					} else if (addUserErrorFeedback == BicycleGarageDatabase.NO_ADDUSER_ERROR) {
-						StringBuilder sb = new StringBuilder();
-
-						sb.append("Cykelägaren har lagts till\n");
-
-						for (int i = 0; i < textFields.length; i++) {
-							sb.append(labels[i]);
-							sb.append(textFields[i].getText() + "\n");
+					boolean barcodeCopiesIsInt = true;
+					try {
+						int temp = Integer.valueOf(textFields[5].getText());
+					} catch (NumberFormatException e) {
+						textFields[5].setText("");
+						barcodeCopiesIsInt = false;
+					}
+					if (barcodeCopiesIsInt) {
+						int addUserErrorFeedback = database.addUser(
+								textFields[0].getText(), textFields[1].getText(),
+								textFields[2].getText(), textFields[3].getText(),
+								textFields[4].getText());
+						if (addUserErrorFeedback == BicycleGarageDatabase.PIN_LENGTH_ERROR) {
+							JOptionPane.showMessageDialog(null,
+									"PIN-koden är inte 4 siffror lång",
+									"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+						} else if (addUserErrorFeedback == BicycleGarageDatabase.BARCODE_LENGTH_ERROR) {
+							JOptionPane.showMessageDialog(null,
+									"Streckkoden är inte 5 siffror lång",
+									"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+						} else if (addUserErrorFeedback == BicycleGarageDatabase.NO_ADDUSER_ERROR) {
+							StringBuilder sb = new StringBuilder();
+							
+							sb.append("Cykelägaren har lagts till\n");
+							
+							for (int i = 0; i < textFields.length; i++) {
+								sb.append(labels[i]);
+								sb.append(textFields[i].getText() + "\n");
+							}
+							
+							mainTextField.setText(sb.toString());
+							
+							if (!textFields[5].getText().isEmpty()
+									&& !textFields[5].getText().contains(" ")) {
+								int barcodeCopies = Integer.valueOf(textFields[5]
+										.getText());
+								String barcode = textFields[1].getText();
+								print(barcode, barcodeCopies);
+							}
+							
+							addFrame.setVisible(false);
 						}
-
-						mainTextField.setText(sb.toString());
-
-						if (!textFields[5].getText().isEmpty()
-								&& !textFields[5].getText().contains(" ")) {
-							int barcodeCopies = Integer.valueOf(textFields[5]
-									.getText());
-							String barcode = textFields[1].getText();
-							print(barcode, barcodeCopies);
-						}
-
-						addFrame.setVisible(false);
 					}
 				}
 			}

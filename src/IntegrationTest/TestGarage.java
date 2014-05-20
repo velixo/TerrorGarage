@@ -262,17 +262,17 @@ public class TestGarage {
 
 	@Test
 	public void testExitGarageAfterTimeout() {
-//		manager.entryBarcode(barcode);
-//		for (int i = 0; i < 4; i++) {
-//			manager.entryCharacter(pin.charAt(i));
-//		}
-//		assertTrue("Bike is not retrievable", database.checkBikeRetrievable(barcode));
-//		try {
-//			Thread.sleep(31 * 60 * 1000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		assertFalse("Bike is retrievable", database.checkBikeRetrievable(barcode));
+		manager.entryBarcode(barcode);
+		for (int i = 0; i < 4; i++) {
+			manager.entryCharacter(pin.charAt(i));
+		}
+		assertTrue("Bike is not retrievable", database.checkBikeRetrievable(barcode));
+		try {
+			Thread.sleep(31 * 60 * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		assertFalse("Bike is retrievable", database.checkBikeRetrievable(barcode));
 	}
 
 	@Test
