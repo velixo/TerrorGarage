@@ -152,7 +152,7 @@ public class PinCharCollector {
 	 * pin-terminalen har några inmatningar sparade eller inte (om listan med
 	 * inmatningar/chars är tom eller ej)
 	 */
-	public boolean isPinCharListEmpty() {
+	boolean isPinCharListEmpty() {
 		if (System.currentTimeMillis() > timeSinceLastCharClick + 10 * 1000) {
 			clear();
 		}

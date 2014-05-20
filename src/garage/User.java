@@ -77,7 +77,7 @@ public class User{
 	 * @param m
 	 * 	mängden cyklar som läggs/tas bort hos 
 	 */
-	public void modBikesInGarage(int m){
+	void modBikesInGarage(int m){
 		bikesInGarage+=m;
 	}
 	

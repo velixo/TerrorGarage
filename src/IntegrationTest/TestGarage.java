@@ -16,7 +16,6 @@ public class TestGarage {
 	private ElectronicLock entryLock;
 	private ElectronicLock exitLock;
 	private PinCodeTerminal terminal;
-//	private PinCharCollector pinChar;
 	private BarcodePrinter printer;
 	private User user;
 	private String name, telNr, pin, barcode, personNumber, dir, nonExistingDir;
@@ -163,15 +162,24 @@ public class TestGarage {
 
 		assertEquals("Pin has changed", pin, currentPin);
 	}
-
+	
 	@Test
-	public void testprintBarcodes() {
-		if (database.checkBarcodeRegistered(barcode)) {
-			manager.print(barcode);
-			manager.print(barcode);
-
-			// inte klar än
+	public void testNonExistingUserTerminalPinChange() {
+		String nonExistingPin = "1111";
+		String nonExistingBarcode = "11111";
+		String newPin = "9876";
+		assertNull("User exists", database.getUserByBarcode(nonExistingBarcode));
+		manager.entryCharacter('*');
+		for (int i = 0; i < 4; i++) {
+			manager.entryCharacter(nonExistingPin.charAt(i));
 		}
+		for (int i = 0; i < 5; i++) {
+			manager.entryCharacter(nonExistingBarcode.charAt(i));
+		}
+		for (int i = 0; i < 4; i++) {
+			manager.entryCharacter(newPin.charAt(i));
+		}
+		assertTrue("PinCharList is not empty", manager.isPinCharListEmpty());
 	}
 
 	@Test
@@ -200,6 +208,16 @@ public class TestGarage {
 		String noPin = "3456";
 		assertFalse("Pin exists", database.checkPinRegistered(noPin));
 
+	}
+	
+	@Test
+	public void testNonExistingPinTerminal() {
+		assertFalse("Bike with barcode 12345 is retrievable", database.checkBikeRetrievable(barcode));
+		assertFalse("Pin 1111 is registered", database.checkPinRegistered("1111"));
+		for (int i = 0; i < 4; i++) {
+			manager.entryCharacter('1');
+		}
+		assertFalse("Bike with barcode 12345 is retrievable", database.checkBikeRetrievable(barcode));
 	}
 
 	@Test
@@ -233,22 +251,28 @@ public class TestGarage {
 			e.printStackTrace();
 		}
 		assertTrue("PinCharList is not empty", manager.isPinCharListEmpty());
+		manager.entryCharacter('2');
+		try {
+			Thread.sleep(11 * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		assertTrue("PinCharList is not empty", manager.isPinCharListEmpty());
 	}
 
 	@Test
 	public void testExitGarageAfterTimeout() {
-		//TODO;
-		manager.entryBarcode(barcode);
-		for (int i = 0; i < 4; i++) {
-			manager.entryCharacter(pin.charAt(i));
-		}
-		assertTrue("Bike is not retrievable", database.checkBikeRetrievable(barcode));
-		try {
-			Thread.sleep(31 * 60 * 1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		assertFalse("Bike is retrievable", database.checkBikeRetrievable(barcode));
+//		manager.entryBarcode(barcode);
+//		for (int i = 0; i < 4; i++) {
+//			manager.entryCharacter(pin.charAt(i));
+//		}
+//		assertTrue("Bike is not retrievable", database.checkBikeRetrievable(barcode));
+//		try {
+//			Thread.sleep(31 * 60 * 1000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		assertFalse("Bike is retrievable", database.checkBikeRetrievable(barcode));
 	}
 
 	@Test
@@ -332,6 +356,81 @@ public class TestGarage {
 		database.load();
 		User tempUser = database.getUserByBarcode(barcode);
 		assertTrue("User is not the same/saved", user.equals(tempUser));
+		if (f.exists()) {
+			File[] files = f.listFiles();
+			for (File fSub : files) {
+				fSub.delete();
+			}
+			f.delete();
+		}
+	}
+	
+	@Test
+	public void testUserEquals() {
+		String secondPin = "4321";
+		String secondBarcode = "54321";
+		String secondName = "Tjalle";
+		String secondTelNr = "0739000000";
+		String secondPersonNr = "99999999";
+		
+		user = database.getUserByBarcode(barcode);
+		User secondUser = new User(secondName, secondTelNr, secondBarcode, secondPin,secondPersonNr);
+		User thirdUser = new User(name, telNr, barcode, pin,personNumber);
+		assertFalse("Users are the same", user.equals(secondUser));
+		assertTrue("Users are not the same", user.equals(thirdUser));
+	}
+	
+	@Test
+	public void testGetDirectory() {
+		database.setDirectory(dir);
+		assertEquals("The directory is not testDirectory", dir, database.getDirectory());
+	}
+	
+	@Test
+	public void testThreadsInPinChar() {
+		String newPin = "9876";
+		String currentPin;
+		manager.entryCharacter('*');
+		for (int i = 0; i < 4; i++) {
+			manager.entryCharacter(pin.charAt(i));
+			try {
+				Thread.sleep(9 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		for (int i = 0; i < 5; i++) {
+			manager.entryCharacter(barcode.charAt(i));
+			try {
+				Thread.sleep(9 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		for (int i = 0; i < 4; i++) {
+			manager.entryCharacter(newPin.charAt(i));
+			try {
+				Thread.sleep(9 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		currentPin = database.getUserByBarcode(barcode).getPin();
+
+		assertEquals("Pin has not changed", newPin, currentPin);
+	}
+	
+	@Test
+	public void testLoadCapacity() {
+		database.load();
+		int oldCap = database.getCapacity();
+		database = new BicycleGarageDatabase(oldCap + 100);
+		database.setDirectory(dir);
+		database.save();
+		database.load();
+		int currentCap = database.getCapacity();
+		assertNotEquals("Capacity is not the same", oldCap, currentCap);
+		
 	}
 
 }

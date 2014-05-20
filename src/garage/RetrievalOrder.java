@@ -1,7 +1,7 @@
 package garage;
 import java.sql.Timestamp;
 
-public class RetrievalOrder {
+class RetrievalOrder {
 	String pin;
 	Timestamp expiration;
 	
