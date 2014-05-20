@@ -148,10 +148,10 @@ public class BicycleGarageDatabase {
 		for(String bc : barcodeMap.keySet()){
 			save(bc);
 		}
-		File dir = new File(savedir);
-		if(!dir.exists()){
-			dir.mkdir();
-		}
+//		File dir = new File(savedir);
+//		if(!dir.exists()){
+//			dir.mkdir();
+//		}
 		try {
 			FileWriter fw = new FileWriter(savedir + "/cap");
 			fw.write(capacity);
