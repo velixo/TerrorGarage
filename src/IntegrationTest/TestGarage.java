@@ -356,13 +356,6 @@ public class TestGarage {
 		database.load();
 		User tempUser = database.getUserByBarcode(barcode);
 		assertTrue("User is not the same/saved", user.equals(tempUser));
-		if (f.exists()) {
-			File[] files = f.listFiles();
-			for (File fSub : files) {
-				fSub.delete();
-			}
-			f.delete();
-		}
 	}
 	
 	@Test
@@ -424,13 +417,24 @@ public class TestGarage {
 	public void testLoadCapacity() {
 		database.load();
 		int oldCap = database.getCapacity();
-		database = new BicycleGarageDatabase(oldCap + 100);
+		database = new BicycleGarageDatabase(oldCap);
+		database.setCapacity(oldCap + 100);
 		database.setDirectory(dir);
 		database.save();
+		
+		database = new BicycleGarageDatabase(1);
 		database.load();
 		int currentCap = database.getCapacity();
 		assertNotEquals("Capacity is not the same", oldCap, currentCap);
 		
+	}
+	
+	@Test
+	public void testSetCapacityLessThanBikesInGarage() {
+		manager.entryBarcode(barcode);
+		manager.entryBarcode(barcode);
+		manager.entryBarcode(barcode);
+		assertFalse("Capacity was changed", database.setCapacity(2));
 	}
 
 }
