@@ -783,7 +783,7 @@ public class Operator {
 									+ u.getTelNr() + " -> " + textSubFields[3].getText()
 									+ "\nPersonNr: " + u.getPersonNr()
 									+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
-									+ " -> " + textSubFields[5].getText());
+									+ " -> " + textSubFields[6].getText());
 							mainTextField.setText("");
 							mainTextField.setText(sb.toString());
 							
