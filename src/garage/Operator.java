@@ -343,41 +343,50 @@ public class Operator {
 					} catch (NumberFormatException e) {
 						textFields[5].setText("");
 						barcodeCopiesIsInt = false;
+						JOptionPane.showMessageDialog(null,
+								"Skriv noll eller positiv siffra i Antal Streckkodskopior",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 					}
 					if (barcodeCopiesIsInt) {
-						int addUserErrorFeedback = database.addUser(
-								textFields[0].getText(), textFields[1].getText(),
-								textFields[2].getText(), textFields[3].getText(),
-								textFields[4].getText());
-						if (addUserErrorFeedback == BicycleGarageDatabase.PIN_LENGTH_ERROR) {
+						if (Integer.valueOf(textFields[5].getText()) < 0) {
 							JOptionPane.showMessageDialog(null,
-									"PIN-koden är inte 4 siffror lång",
+									"Skriv noll eller positiv siffra i Antal Streckkodskopior",
 									"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-						} else if (addUserErrorFeedback == BicycleGarageDatabase.BARCODE_LENGTH_ERROR) {
-							JOptionPane.showMessageDialog(null,
-									"Streckkoden är inte 5 siffror lång",
-									"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-						} else if (addUserErrorFeedback == BicycleGarageDatabase.NO_ADDUSER_ERROR) {
-							StringBuilder sb = new StringBuilder();
-							
-							sb.append("Cykelägaren har lagts till\n");
-							
-							for (int i = 0; i < textFields.length; i++) {
-								sb.append(labels[i]);
-								sb.append(textFields[i].getText() + "\n");
+						} else {							
+							int addUserErrorFeedback = database.addUser(
+									textFields[0].getText(), textFields[1].getText(),
+									textFields[2].getText(), textFields[3].getText(),
+									textFields[4].getText());
+							if (addUserErrorFeedback == BicycleGarageDatabase.PIN_LENGTH_ERROR) {
+								JOptionPane.showMessageDialog(null,
+										"PIN-koden är inte 4 siffror lång",
+										"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+							} else if (addUserErrorFeedback == BicycleGarageDatabase.BARCODE_LENGTH_ERROR) {
+								JOptionPane.showMessageDialog(null,
+										"Streckkoden är inte 5 siffror lång",
+										"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+							} else if (addUserErrorFeedback == BicycleGarageDatabase.NO_ADDUSER_ERROR) {
+								StringBuilder sb = new StringBuilder();
+								
+								sb.append("Cykelägaren har lagts till\n");
+								
+								for (int i = 0; i < textFields.length; i++) {
+									sb.append(labels[i]);
+									sb.append(textFields[i].getText() + "\n");
+								}
+								
+								mainTextField.setText(sb.toString());
+								
+								if (!textFields[5].getText().isEmpty()
+										&& !textFields[5].getText().contains(" ")) {
+									int barcodeCopies = Integer.valueOf(textFields[5]
+											.getText());
+									String barcode = textFields[1].getText();
+									print(barcode, barcodeCopies);
+								}
+								
+								addFrame.setVisible(false);
 							}
-							
-							mainTextField.setText(sb.toString());
-							
-							if (!textFields[5].getText().isEmpty()
-									&& !textFields[5].getText().contains(" ")) {
-								int barcodeCopies = Integer.valueOf(textFields[5]
-										.getText());
-								String barcode = textFields[1].getText();
-								print(barcode, barcodeCopies);
-							}
-							
-							addFrame.setVisible(false);
 						}
 					}
 				}
@@ -728,37 +737,48 @@ public class Operator {
 		private class SubApply implements ActionListener {
 
 			public void actionPerformed(ActionEvent e) {
-
-				database.removeUser(u.getBarcode());
-				database.addUser(textSubFields[0].getText(),
-						textSubFields[1].getText(), textSubFields[2].getText(),
-						textSubFields[3].getText(), textSubFields[4].getText());
-				// database.modifyBikesInGarage();
-
-				StringBuilder sb = new StringBuilder();
-				sb.append("Cykelägaren har redigerats\nPIN: " + u.getPin()
-						+ " -> " + textSubFields[0].getText() + "\nStreckkod: "
-						+ u.getBarcode() + " -> " + textSubFields[1].getText()
-						+ "\nNamn: " + u.getName() + " -> "
-						+ textSubFields[2].getText() + "\nTelNr: "
-						+ u.getTelNr() + " -> " + textSubFields[3].getText()
-						+ "\nPersonNr: " + u.getPersonNr()
-						+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
-						+ " -> " + textSubFields[5].getText());
-				mainTextField.setText("");
-				mainTextField.setText(sb.toString());
-
-				if (!textSubFields[4].getText().isEmpty()
-						&& !textSubFields[4].getText().contains(" ")) { // fixade
-																		// bugg
-																		// #4
-					int barcodeCopies = Integer.valueOf(textSubFields[4]
-							.getText());
-					String barcode = textSubFields[1].getText();
-					print(barcode, barcodeCopies);
+				
+				if (textSubFields[0].getText().length() != 4) {
+					JOptionPane.showMessageDialog(null,
+							"PIN-koden är inte 4 siffror lång",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+				} else if (textSubFields[1].getText().length() != 4) {
+					JOptionPane.showMessageDialog(null,
+							"Streckkoden är inte 5 siffror lång",
+							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+				} else {
+					database.removeUser(u.getBarcode());
+					database.addUser(textSubFields[0].getText(),
+							textSubFields[1].getText(), textSubFields[2].getText(),
+							textSubFields[3].getText(), textSubFields[4].getText());
+					// database.modifyBikesInGarage();
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append("Cykelägaren har redigerats\nPIN: " + u.getPin()
+							+ " -> " + textSubFields[0].getText() + "\nStreckkod: "
+							+ u.getBarcode() + " -> " + textSubFields[1].getText()
+							+ "\nNamn: " + u.getName() + " -> "
+							+ textSubFields[2].getText() + "\nTelNr: "
+							+ u.getTelNr() + " -> " + textSubFields[3].getText()
+							+ "\nPersonNr: " + u.getPersonNr()
+							+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
+							+ " -> " + textSubFields[5].getText());
+					mainTextField.setText("");
+					mainTextField.setText(sb.toString());
+					
+					if (!textSubFields[4].getText().isEmpty()
+							&& !textSubFields[4].getText().contains(" ")) { // fixade
+						// bugg
+						// #4
+						int barcodeCopies = Integer.valueOf(textSubFields[4]
+								.getText());
+						String barcode = textSubFields[1].getText();
+						print(barcode, barcodeCopies);
+					}
+					
+					editSubFrame.setVisible(false);
 				}
 
-				editSubFrame.setVisible(false);
 			}
 
 		}
