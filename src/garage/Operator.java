@@ -341,7 +341,7 @@ public class Operator {
 					try {
 						int temp = Integer.valueOf(textFields[5].getText());
 					} catch (NumberFormatException e) {
-						textFields[5].setText("");
+						textFields[5].setText("0");
 						barcodeCopiesIsInt = false;
 						JOptionPane.showMessageDialog(null,
 								"Skriv noll eller positiv siffra i Antal Streckkodskopior",
@@ -349,6 +349,7 @@ public class Operator {
 					}
 					if (barcodeCopiesIsInt) {
 						if (Integer.valueOf(textFields[5].getText()) < 0) {
+							textFields[5].setText("0");
 							JOptionPane.showMessageDialog(null,
 									"Skriv noll eller positiv siffra i Antal Streckkodskopior",
 									"Felmeddelande", JOptionPane.ERROR_MESSAGE);
@@ -746,36 +747,55 @@ public class Operator {
 							"Streckkoden är inte 5 siffror lång",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 				} else {
-					database.removeUser(u.getBarcode());
-					database.addUser(textSubFields[0].getText(),
-							textSubFields[1].getText(), textSubFields[2].getText(),
-							textSubFields[3].getText(), textSubFields[4].getText());
-					// database.modifyBikesInGarage();
-					
-					StringBuilder sb = new StringBuilder();
-					sb.append("Cykelägaren har redigerats\nPIN: " + u.getPin()
-							+ " -> " + textSubFields[0].getText() + "\nStreckkod: "
-							+ u.getBarcode() + " -> " + textSubFields[1].getText()
-							+ "\nNamn: " + u.getName() + " -> "
-							+ textSubFields[2].getText() + "\nTelNr: "
-							+ u.getTelNr() + " -> " + textSubFields[3].getText()
-							+ "\nPersonNr: " + u.getPersonNr()
-							+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
-							+ " -> " + textSubFields[5].getText());
-					mainTextField.setText("");
-					mainTextField.setText(sb.toString());
-					
-					if (!textSubFields[4].getText().isEmpty()
-							&& !textSubFields[4].getText().contains(" ")) { // fixade
-						// bugg
-						// #4
-						int barcodeCopies = Integer.valueOf(textSubFields[4]
-								.getText());
-						String barcode = textSubFields[1].getText();
-						print(barcode, barcodeCopies);
+					boolean barcodeCopiesIsInt = true;
+					try {
+						int temp = Integer.valueOf(textSubFields[5].getText());
+					} catch (NumberFormatException f) {
+						textSubFields[5].setText("0");
+						barcodeCopiesIsInt = false;
+						JOptionPane.showMessageDialog(null,
+								"Skriv noll eller positiv siffra i Antal Streckkodskopior",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 					}
-					
-					editSubFrame.setVisible(false);
+					if (barcodeCopiesIsInt) {
+						if (Integer.valueOf(textSubFields[5].getText()) < 0) {
+							textSubFields[5].setText("0");
+							JOptionPane.showMessageDialog(null,
+									"Skriv noll eller positiv siffra i Antal Streckkodskopior",
+									"Felmeddelande", JOptionPane.ERROR_MESSAGE);
+						} else {		
+							database.removeUser(u.getBarcode());
+							database.addUser(textSubFields[0].getText(),
+									textSubFields[1].getText(), textSubFields[2].getText(),
+									textSubFields[3].getText(), textSubFields[4].getText());
+							// database.modifyBikesInGarage();
+							
+							StringBuilder sb = new StringBuilder();
+							sb.append("Cykelägaren har redigerats\nPIN: " + u.getPin()
+									+ " -> " + textSubFields[0].getText() + "\nStreckkod: "
+									+ u.getBarcode() + " -> " + textSubFields[1].getText()
+									+ "\nNamn: " + u.getName() + " -> "
+									+ textSubFields[2].getText() + "\nTelNr: "
+									+ u.getTelNr() + " -> " + textSubFields[3].getText()
+									+ "\nPersonNr: " + u.getPersonNr()
+									+ "\nAntal cyklar i garaget: " + u.getBikesInGarage()
+									+ " -> " + textSubFields[5].getText());
+							mainTextField.setText("");
+							mainTextField.setText(sb.toString());
+							
+							if (!textSubFields[4].getText().isEmpty()
+									&& !textSubFields[4].getText().contains(" ")) { // fixade
+								// bugg
+								// #4
+								int barcodeCopies = Integer.valueOf(textSubFields[4]
+										.getText());
+								String barcode = textSubFields[1].getText();
+								print(barcode, barcodeCopies);
+							}
+							
+							editSubFrame.setVisible(false);
+						}
+					}
 				}
 
 			}
