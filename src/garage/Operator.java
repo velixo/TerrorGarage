@@ -667,9 +667,8 @@ public class Operator {
 				textSubFields[1].setEditable(false);
 				textSubFields[2].setText(u.getName());
 				textSubFields[3].setText(u.getTelNr());
-				// textSubFields[4].setText("0"); //kan vara bra att det står så
-				// från början
-				textSubFields[5].setText(u.getPersonNr());
+				textSubFields[4].setText(u.getPersonNr());
+//				textSubFields[5].setText(0);
 				textSubFields[6].setText(String.valueOf(u.getBikesInGarage()));
 
 				SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
@@ -742,7 +741,7 @@ public class Operator {
 					JOptionPane.showMessageDialog(null,
 							"PIN-koden är inte 4 siffror lång",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-				} else if (textSubFields[1].getText().length() != 4) {
+				} else if (textSubFields[1].getText().length() != 5) {
 					JOptionPane.showMessageDialog(null,
 							"Streckkoden är inte 5 siffror lång",
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
