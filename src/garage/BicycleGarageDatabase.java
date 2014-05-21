@@ -299,6 +299,7 @@ public class BicycleGarageDatabase {
 	 */
 	public void removeUser(String barcode){
 		User u = barcodeMap.get(barcode);
+		modifyBikesInGarage(u.getBarcode(), -u.getBikesInGarage());
 		pinMap.get(u.getPin()).remove(u);
 		barcodeMap.remove(barcode);
 		
