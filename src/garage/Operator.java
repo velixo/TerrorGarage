@@ -279,6 +279,8 @@ public class Operator {
 				l.setLabelFor(textField);
 				p.add(textField);
 			}
+			
+			textFields[5].setText("0");
 
 			SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
 
@@ -669,7 +671,7 @@ public class Operator {
 				textSubFields[2].setText(u.getName());
 				textSubFields[3].setText(u.getTelNr());
 				textSubFields[4].setText(u.getPersonNr());
-//				textSubFields[5].setText(0);
+				textSubFields[5].setText("0");
 				textSubFields[6].setText(String.valueOf(u.getBikesInGarage()));
 
 				SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);
