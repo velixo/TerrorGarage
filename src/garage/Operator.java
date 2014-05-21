@@ -785,11 +785,11 @@ public class Operator {
 							mainTextField.setText("");
 							mainTextField.setText(sb.toString());
 							
-							if (!textSubFields[4].getText().isEmpty()
-									&& !textSubFields[4].getText().contains(" ")) { // fixade
+							if (!textSubFields[5].getText().isEmpty()
+									&& !textSubFields[5].getText().contains(" ")) { // fixade
 								// bugg
 								// #4
-								int barcodeCopies = Integer.valueOf(textSubFields[4]
+								int barcodeCopies = Integer.valueOf(textSubFields[5]
 										.getText());
 								String barcode = textSubFields[1].getText();
 								print(barcode, barcodeCopies);
