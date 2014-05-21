@@ -765,12 +765,14 @@ public class Operator {
 							JOptionPane.showMessageDialog(null,
 									"Skriv noll eller positiv siffra i Antal Streckkodskopior",
 									"Felmeddelande", JOptionPane.ERROR_MESSAGE);
-						} else {		
+						} else {
+							int tempBikesInGarage = u.getBikesInGarage();
 							database.removeUser(u.getBarcode());
 							database.addUser(textSubFields[0].getText(),
 									textSubFields[1].getText(), textSubFields[2].getText(),
 									textSubFields[3].getText(), textSubFields[4].getText());
-							// database.modifyBikesInGarage();
+							database.modifyBikesInGarage(textSubFields[1].getText(), tempBikesInGarage);
+							
 							
 							StringBuilder sb = new StringBuilder();
 							sb.append("Cykelägaren har redigerats\nPIN: " + u.getPin()
