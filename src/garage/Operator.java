@@ -205,21 +205,26 @@ public class Operator {
 							"Felmeddelande", JOptionPane.ERROR_MESSAGE);
 
 				} else {
-					
-					task.editSaveFrequency(Long.parseLong(textFields[0].getText()));
-					database.setCapacity(Integer.parseInt(textFields[1].getText()));
-					database.setDirectory(textFields[2].getText());
-					
-					StringBuilder sb = new StringBuilder();
-					
-					for (int i = 0; i < textFields.length; i++){
-						sb.append(labels[i]);
-						sb.append(textFields[i].getText() + "\n");
+					if (database.setCapacity(Integer.parseInt(textFields[1].getText()))) {						
+						task.editSaveFrequency(Long.parseLong(textFields[0].getText()));
+						database.setDirectory(textFields[2].getText());
 						
+						StringBuilder sb = new StringBuilder();
+						
+						for (int i = 0; i < textFields.length; i++){
+							sb.append(labels[i]);
+							sb.append(textFields[i].getText() + "\n");
+							
+						}
+						
+						mainTextField.setText(sb.toString());
+						settingsFrame.setVisible(false);
+					} else {
+						JOptionPane.showMessageDialog(null,
+								"Den nya begärda kapaciteten är mindre än mängden cyklar i garaget",
+								"Felmeddelande", JOptionPane.ERROR_MESSAGE);			
 					}
 					
-					mainTextField.setText(sb.toString());
-					settingsFrame.setVisible(false);
 				}
 			}
 		}
